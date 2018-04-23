@@ -1,0 +1,16 @@
+{
+  "name": "com.sap.ml.data.pool_backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "express.js",
+  "author": "D062271",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.14.0",
+    "serve-favicon": "^2.3.0"
+  },
+  "scripts": {
+    "start": "node express.js",
+    "test": "node-debug express.js"
+  }
+}

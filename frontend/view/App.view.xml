@@ -1,0 +1,20 @@
+<core:View
+	controllerName="com.sap.ml.data.pool.controller.App"
+	xmlns="sap.m" xmlns:core="sap.ui.core"
+	height="100%">
+	
+	<SplitContainer id="container" initialMaster="master">
+		<masterPages>
+			<Page id="master" title="{i18n>Nav}" icon="sap-icon://action" class="sapUiStdPage">
+				<content>
+					<List>
+						<items>
+							<StandardListItem title="{i18n>Nav.home}" type="Navigation" press="onPressGoToHome"/>
+							<StandardListItem title="{i18n>Nav.datasets}" type="Navigation" press="onPressGoToDatasets"/>
+						</items>
+					</List>
+				</content>
+			</Page>
+		</masterPages>
+	</SplitContainer>
+</core:View>

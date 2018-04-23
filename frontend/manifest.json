@@ -1,0 +1,87 @@
+{
+    "_version": "1.1.0",
+    "sap.app": {
+        "_version": "1.1.0",
+        "id": "com.sap.ml.data.pool",
+        "type": "application",
+        "i18n": "i18n/i18n.properties",
+        "title": "{{App.title}}",
+        "description": "{{App.description}}",
+        "applicationVersion": {
+            "version": "1.0.0"
+        }
+    },
+    "sap.ui": {
+        "_version": "1.1.0",
+        "technology": "UI5",
+        "deviceTypes": {
+            "desktop": true,
+            "tablet": true,
+            "phone": true
+        },
+        "supportedThemes": [
+            "sap_belize"
+        ]
+    },
+    "sap.ui5": {
+        "_version": "1.1.0",
+        "rootView": "com.sap.ml.data.pool.view.App",
+        "dependencies": {
+            "minUI5Version": "1.30",
+            "libs": {
+                "sap.m": {}
+            }
+        },
+        "contentDensities": {
+            "compact": true,
+            "cozy": true
+        },
+        "models": {
+            "i18n": {
+                "type": "sap.ui.model.resource.ResourceModel",
+                "settings": {
+                    "bundleName": "com.sap.ml.data.pool.i18n.i18n"
+                }
+            }
+        },
+		"routing": {
+			 "config": {
+				"routerClass": "sap.m.routing.Router",
+				"viewType": "XML",
+				"viewPath": "com.sap.ml.data.pool.view",
+				"controlId": "container",
+				"controlAggregation": "detailPages",
+				"transition": "slide",
+				"bypassed": {
+					"target": "notFound"
+				}
+			 },
+			 "routes": [
+				{
+					"pattern": "",
+					"name": "home",
+					"target": "home"
+				},
+				{
+					"pattern": "datasetlist",
+					"name": "datasetlist",
+					"target": "datasetlist"
+				}
+			],
+			 "targets": {
+				"home": {
+				   "viewName": "Home",
+				   "viewLevel": 1
+				},
+				"datasetlist": {
+				   "viewName": "DatasetList",
+				   "viewLevel": 1
+				},
+				"notFound": {
+				   "viewName": "NotFound",
+				   "viewLevel": 2
+				}
+			}
+		}
+    }
+}

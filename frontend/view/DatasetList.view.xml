@@ -1,0 +1,11 @@
+<core:View
+	controllerName="com.sap.ml.data.pool.controller.DatasetList"
+	xmlns="sap.m" xmlns:core="sap.ui.core"
+	height="100%">
+	
+	<Page class="sapUiResponsiveContentPadding">
+		<content>
+			<Label text="Dataset List View"/>
+		</content>
+	</Page>
+</core:View>

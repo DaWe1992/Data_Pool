@@ -1,0 +1,11 @@
+<mvc:View
+	controllerName="com.sap.ml.data.pool.controller.Home"
+	xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc"
+	height="100%">
+
+	<Page class="sapUiResponsiveContentPadding">
+		<content>
+			<Label text="Home View"/>
+		</content>
+	</Page>
+</mvc:View>
