@@ -5,9 +5,13 @@
 
 "use strict";
 
+// import necessary modules
+var path 	= require("path")
+
 // return config object
 module.exports = {
     app: {
-        port: 8080
+        port: 8080,
+		root_path: path.join(__dirname, "__DATA__")
     }
 };

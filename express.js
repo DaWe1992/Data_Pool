@@ -24,6 +24,9 @@ oApp.use(
     )
 );
 
+// include routes
+require("./routes/routes-datasets.js")(oApp);
+
 // bind application to port
 http.createServer(oApp).listen(config.app.port, function() {
     console.log("Server listens on port " + config.app.port);
