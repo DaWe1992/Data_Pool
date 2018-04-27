@@ -5,12 +5,17 @@
 	
 	<SplitContainer id="container" initialMaster="master">
 		<masterPages>
-			<Page id="master" title="{i18n>Nav}" icon="sap-icon://action" class="sapUiStdPage">
+			<Page
+				id="master"
+				title="{i18n>Nav}"
+				icon="sap-icon://action"
+				class="sapUiStdPage">
 				<content>
 					<List>
 						<items>
-							<StandardListItem title="{i18n>Nav.home}" type="Navigation" press="onPressGoToHome"/>
-							<StandardListItem title="{i18n>Nav.datasets}" type="Navigation" press="onPressGoToDatasets"/>
+							<StandardListItem title="{i18n>Nav.home}" icon="sap-icon://home" type="Navigation" press="onPressGoToHome"/>
+							<StandardListItem title="{i18n>Nav.datasets}" icon="sap-icon://table-chart" type="Navigation" press="onPressGoToDatasets"/>
+							<StandardListItem title="{i18n>Nav.upload}" icon="sap-icon://upload" type="Navigation" press="onPressGoToUpload"/>
 						</items>
 					</List>
 				</content>

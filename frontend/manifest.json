@@ -63,9 +63,14 @@
 					"target": "home"
 				},
 				{
-					"pattern": "datasetlist",
-					"name": "datasetlist",
-					"target": "datasetlist"
+					"pattern": "datasets",
+					"name": "datasets",
+					"target": "datasets"
+				},
+				{
+					"pattern": "upload",
+					"name": "upload",
+					"target": "upload"
 				}
 			],
 			 "targets": {
@@ -73,8 +78,12 @@
 				   "viewName": "Home",
 				   "viewLevel": 1
 				},
-				"datasetlist": {
+				"datasets": {
 				   "viewName": "DatasetList",
+				   "viewLevel": 1
+				},
+				"upload": {
+				   "viewName": "Upload",
 				   "viewLevel": 1
 				},
 				"notFound": {

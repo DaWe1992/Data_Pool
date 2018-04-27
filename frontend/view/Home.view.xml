@@ -3,9 +3,15 @@
 	xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc"
 	height="100%">
 
-	<Page class="sapUiResponsiveContentPadding">
+	<Page
+		id="homePage"
+		title="{i18n>Home.page.header}"
+		class="sapUiResponsiveContentPadding">
 		<content>
-			<Label text="Home View"/>
+			<VBox>
+				<Label text="{i18n>App.title}" class="text-home"/>
+				<Label text="{i18n>App.description}" class="text-home"/>
+			</VBox>
 		</content>
 	</Page>
 </mvc:View>

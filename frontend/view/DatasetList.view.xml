@@ -3,9 +3,32 @@
 	xmlns="sap.m" xmlns:core="sap.ui.core"
 	height="100%">
 	
-	<Page class="sapUiResponsiveContentPadding">
+	<Page title="{i18n>Datasetlist.page.header}">
 		<content>
-			<Label text="Dataset List View"/>
+			<List
+				id="datasetList"
+				items="{path: '/'}"
+				height="100%">
+				<items>
+					<CustomListItem press="onDatasetItemPress">
+						<HBox>
+							<core:Icon
+								src="sap-icon://table-chart"
+								size="2rem"
+								class="sapUiSmallMarginBegin sapUiSmallMarginTopBottom"/>
+							<VBox class="sapUiSmallMarginBegin sapUiSmallMarginTopBottom">
+								<Label text="{file_name}"/>
+								<Link text="{i18n>Datasetlist.download}" href="/datasets/{file_name}"/>
+							</VBox>
+						</HBox>
+					</CustomListItem>
+				</items>
+				<infoToolbar>
+					<Toolbar active="false">
+						<Label id="toolbarLabel"/>
+					</Toolbar>
+				</infoToolbar>
+			</List>
 		</content>
 	</Page>
 </core:View>

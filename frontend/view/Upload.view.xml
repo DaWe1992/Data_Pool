@@ -1,0 +1,28 @@
+<core:View
+	controllerName="com.sap.ml.data.pool.controller.Upload"
+	xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:l="sap.ui.layout"
+	xmlns:u="sap.ui.unified" xmlns:mvc="sap.ui.core.mvc"
+	height="100%">
+	
+	<Page
+		title="{i18n>Upload.page.header}"
+		class="sapUiResponsiveContentPadding">
+		<content>
+			<l:VerticalLayout>
+				<u:FileUploader
+					id="fileUploader"
+					name="myFileUpload"
+					uploadUrl="/dataset"
+					uploadComplete="handleUploadComplete"
+					typeMissmatch="handleTypeMissmatch"
+					style="Emphasized"
+					fileType="zip"
+					placeholder="{i18n>Upload.fileuploader.placeholder}">
+				</u:FileUploader>
+				<Button
+					text="{i18n>Upload.button.text}"
+					press="handleUploadPress"/>
+			</l:VerticalLayout>
+		</content>
+	</Page>
+</core:View>

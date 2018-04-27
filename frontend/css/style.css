@@ -1,0 +1,12 @@
+.myBackgroundStyle {
+	background-image: url("../img/ml_brain.jpg"); 
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+
+.text-home {
+	font-size: 1.25em !important;
+	color: #FFF !important;
+}

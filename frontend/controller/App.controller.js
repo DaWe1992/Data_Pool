@@ -23,17 +23,25 @@ sap.ui.define([
             self  = this;
 			
 			// add content density class
-            this.getView().addStyleClass(
+            /*this.getView().addStyleClass(
                 this.getOwnerComponent().getContentDensityClass()
-            );
+            );*/
         },
 		
+		/*
+		 * Navigation
+		 */
+		 
 		onPressGoToHome: function(oEvent) {
 			this.getRouter().navTo("home");
 		},
 		
 		onPressGoToDatasets: function(oEvent) {
-			this.getRouter().navTo("datasetlist");
+			this.getRouter().navTo("datasets");
+		},
+		
+		onPressGoToUpload: function(oEvent) {
+			this.getRouter().navTo("upload");
 		}
 	})
 });

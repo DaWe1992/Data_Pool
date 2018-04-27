@@ -1,6 +1,9 @@
 /**
- * Created by D062271 on 23.04.2018.
- * This file contains the configuration of the app.
+ * Backend configuration.
+ * 27.04.2018
+ *
+ * @author D062271
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  */
 
 "use strict";
@@ -12,6 +15,7 @@ var path 	= require("path")
 module.exports = {
     app: {
         port: 8080,
-		root_path: path.join(__dirname, "__DATA__")
+		dataset_root_path: path.join(__dirname, "__DATA__"),
+		auth_path: path.join(__dirname, "auth", "admins.txt")
     }
 };
