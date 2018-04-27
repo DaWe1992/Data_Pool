@@ -23,11 +23,12 @@ sap.ui.define([
         /**
          * Gets all datasets from the backend.
          *
+		 * @param pw (password)
          * @param fSuccess (callback in case of success)
          * @param fError (callback in case of error)
          */
-        isAdmin: function(fSuccess, fError) {
-            this._http.performGet("/isAdmin", fSuccess, fError);
+        isAdmin: function(pw, fSuccess, fError) {
+            this._http.performGet("/isAdmin/" + pw, fSuccess, fError);
         }
     });
 });

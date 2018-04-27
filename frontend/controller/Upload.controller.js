@@ -47,7 +47,9 @@ sap.ui.define([
 		 * @param oEvent
 		 */
 		handleUploadPress: function(oEvent) {
-			this._isAdmin(function(res) {
+			var secret = prompt("Please enter the secret...");
+			
+			this._isAdmin(secret, function(res) {
 				// this is only executed if user is authorized
 				var oView = self.getView();
 				var oFileUploader = oView.byId("fileUploader");
@@ -81,8 +83,8 @@ sap.ui.define([
 		 *
 		 * @param fCallback
 		 */
-		_isAdmin: function(fCallback) {
-			new AdminService().isAdmin(function(res) {
+		_isAdmin: function(pw, fCallback) {
+			new AdminService().isAdmin(pw, function(res) {
 				fCallback(res)
 			}, function(res) {
 				MessageBox.error(self.getTextById("Upload.error.no.admin"));

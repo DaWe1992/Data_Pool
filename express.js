@@ -12,7 +12,7 @@
 var path 	 = require("path");
 var http 	 = require("http");
 var express  = require("express");
-var nodeSSPI = require("node-sspi");
+//var nodeSSPI = require("node-sspi");
 var config 	 = require("./config.js");
 var favicon  = require("serve-favicon");
 var busboy 	 = require("connect-busboy"); 
@@ -31,8 +31,9 @@ oApp.use(
     )
 );
 
+// This code is used for SSO (not possible on linux...)
 // authentication using single-sign-on (SSO)
-oApp.use(function(oReq, oRes, fNext) {
+/*oApp.use(function(oReq, oRes, fNext) {
 	var nodeSSPIObj = new nodeSSPI({
 		retrieveGroups: false
 	});
@@ -40,7 +41,7 @@ oApp.use(function(oReq, oRes, fNext) {
 	nodeSSPIObj.authenticate(oReq, oRes, function(oErr) {
 		oRes.finished || fNext();
 	});
-});
+});*/
 
 // include routes
 require("./routes/routes-datasets.js")(oApp);

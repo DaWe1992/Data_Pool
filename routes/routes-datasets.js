@@ -64,7 +64,7 @@ module.exports = function(oApp) {
 	 *
 	 * @name /dataset
 	 */
-	oApp.post("/dataset", utils.isAdmin ,function(oReq, oRes) {
+	oApp.post("/dataset"/*, utils.isAdmin*/ ,function(oReq, oRes) {
 		var oWriteStream;
 		oReq.pipe(oReq.busboy);
 	
