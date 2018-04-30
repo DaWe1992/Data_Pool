@@ -26,14 +26,22 @@ module.exports = function(oApp) {
 		fs.readdir(config.app.dataset_root_path, function(oErr, aFiles) {
 			var resultArr = new Array()
 			
-			aFiles.forEach(function(oFile) {
-				resultArr.push({
-					"file_name": oFile
-				});
-			});
+			fs.readFile(config.app.dataset_description_path, "utf8", function(oErr, sData) {
+				sData = sData.replace("\n", "|-->|");
+				var aDescriptions = sData.split("|-->|");
 			
-			return oRes.status(200).json({
-				"data": resultArr
+				aFiles.forEach(function(oFile) {
+					sDescription = aDescriptions[indexOf(oFile) + 1];
+				
+					resultArr.push({
+						"file_name": oFile,
+						"file_description": sDescription
+					});
+				});
+				
+				return oRes.status(200).json({
+					"data": resultArr
+				});
 			});
 		});
 	}),
@@ -64,7 +72,7 @@ module.exports = function(oApp) {
 	 *
 	 * @name /dataset
 	 */
-	oApp.post("/dataset"/*, utils.isAdmin*/ ,function(oReq, oRes) {
+	oApp.post("/dataset", function(oReq, oRes) {
 		var oWriteStream;
 		oReq.pipe(oReq.busboy);
 	

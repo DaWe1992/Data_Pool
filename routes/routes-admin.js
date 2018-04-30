@@ -22,7 +22,7 @@ module.exports = function(oApp) {
     oApp.get("/isAdmin/:pw", function(oReq, oRes) {
 		var sPw = oReq.params.pw;
 		
-		if(sPw == "123456") {
+		if(sPw == "mldataset") {
 			oRes.status(200).send("Accepted");
 		} else {
 			oRes.status(400).send("Rejected");

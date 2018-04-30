@@ -31,6 +31,7 @@ sap.ui.define([
 		 * @param oEvent
 		 */
 		handleUploadComplete: function(oEvent) {
+			// TODO: error handling
 			var oView = this.getView();
 			
 			MessageToast.show(

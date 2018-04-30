@@ -15,7 +15,8 @@ var path 	= require("path")
 module.exports = {
     app: {
         port: 8080,
-		dataset_root_path: path.join(__dirname, "__DATA__"),
+		dataset_root_path: path.join(__dirname, "__DATA__", "datasets"),
+		dataset_description_path: path.join(__dirname, "__DATA__", "descriptions.txt"),
 		auth_path: path.join(__dirname, "auth", "admins.txt")
     }
 };
