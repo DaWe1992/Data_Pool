@@ -1,0 +1,23 @@
+extends layout
+
+block content
+	div.container
+		div.row
+			div.col-xs-0.col-sm-3.col-md-4
+			div.col-xs-12.col-sm-6.col-md-4
+				h1.text-center.title Sign In
+					div.wall
+						form(action="/login", method="POST")
+							small
+								label(for="username") *Username:
+							input(type="text", name="username" class="form-control",required, autofocus)
+							small
+								label(for="password") *Password:
+							input(type="password", name="password" class="form-control", required)
+							button(class="btn btn-lg btn-primary btn-block", type="submit") Sign in
+							span.clearfix
+							<!--a(href="/signup", class="btn btn-default btn-block") Sign up-->
+					#message
+					if message
+						p.text-center.error-message #{message}
+			div.col-xs-0.col-sm-3.col-md-4

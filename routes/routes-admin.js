@@ -9,33 +9,22 @@
 "use strict";
 
 // import necessary modules
-var utils 	= require("../utils/utils.js");
+var isAuthenticated = require("../passport/isAuthenticated.js");
+
+// ==============================================================
 
 module.exports = function(oApp) {
 
     /**
      * Checks if a user is admin.
      *
-     * @name /isAdmin/:pw
-	 * @param pw (password)
+     * @name /isAdmin
      */
-    oApp.get("/isAdmin/:pw", function(oReq, oRes) {
-		var sPw = oReq.params.pw;
-		
-		if(sPw == "mldataset") {
+    oApp.get("/isAdmin", isAuthenticated, function(oReq, oRes) {
+		if(oReq.user.username == "admin") {
 			oRes.status(200).send("Accepted");
 		} else {
 			oRes.status(400).send("Rejected");
 		}
-		
-		// This code is used for SSO (not possible on linux...)
-		/*var user = utils.removeDomainName(oReq.connection.user);
-		utils.userInAdminsList(user, function(isAdmin) {
-			if(isAdmin) {
-				oRes.status(200).send("Accepted");
-			} else {
-				oRes.status(400).send("Rejected");
-			}
-		});*/
-	})
+	});
 };

@@ -28,6 +28,21 @@ sap.ui.define([
          */
         getDatasets: function(fSuccess, fError) {
             this._http.performGet("/datasets", fSuccess, fError);
-        }
+        },
+		
+		/**
+		 * Posts the description of the dataset
+		 *
+		 * @param sFileName (name of the file)
+		 * @param sDescription (description of the dataset)
+		 * @param fSuccess (callback in case of success)
+         * @param fError (callback in case of error)
+		 */
+		addDescription: function(sFileName, sDescription, fSuccess, fError) {
+			this._http.performPost("/addDescription", {
+				"file_name": sFileName,
+				"file_description": sDescription
+			}, fSuccess, fError)
+		}
     });
 });

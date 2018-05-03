@@ -18,14 +18,28 @@
 				height="100%">
 				<items>
 					<CustomListItem press="onDatasetItemPress">
-						<HBox>
-							<core:Icon
-								src="sap-icon://table-chart"
-								size="2rem"
-								class="sapUiSmallMarginBegin sapUiSmallMarginTopBottom"/>
-							<VBox class="sapUiSmallMarginBegin sapUiSmallMarginTopBottom">
-								<Label text="{file_name}"/>
-								<Link text="{i18n>Datasetlist.download}" href="/datasets/{file_name}"/>
+						<HBox width="100%">
+							<HBox width="25%">
+								<core:Icon
+									src="sap-icon://table-chart"
+									size="2rem"
+									class="sapUiSmallMarginBegin sapUiSmallMarginTopBottom"/>
+								<VBox class="sapUiSmallMarginBegin sapUiSmallMarginTopBottom">
+									<Label
+										text="{file_name}"
+										class="bold"/>
+									<Link
+										text="{i18n>Datasetlist.download}"
+										href="/datasets/{file_name}"
+										class="underline"/>
+								</VBox>
+							</HBox>
+							<VBox
+								width="65%"
+								class="sapUiLargeMarginBegin sapUiSmallMarginTopBottom">
+								<Text
+									text="{file_description}"
+									class="italic justify"/>
 							</VBox>
 						</HBox>
 					</CustomListItem>

@@ -9,8 +9,12 @@
 		class="sapUiResponsiveContentPadding">
 		<content>
 			<VBox>
-				<Label text="{i18n>App.title}" class="text-home"/>
-				<Label text="{i18n>App.description}" class="text-home"/>
+				<Label
+					text="{i18n>App.title}"
+					class="text-home"/>
+				<Label
+					text="{i18n>App.description}"
+					class="text-home"/>
 			</VBox>
 		</content>
 	</Page>

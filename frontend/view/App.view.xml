@@ -3,19 +3,39 @@
 	xmlns="sap.m" xmlns:core="sap.ui.core"
 	height="100%">
 	
-	<SplitContainer id="container" initialMaster="master">
+	<SplitContainer
+		id="container"
+		initialMaster="master">
 		<masterPages>
 			<Page
 				id="master"
 				title="{i18n>Nav}"
 				icon="sap-icon://action"
 				class="sapUiStdPage">
+				<headerContent>
+					<Button
+						icon="sap-icon://log"
+						press="onPressLogout"/>
+				</headerContent>
 				<content>
 					<List>
 						<items>
-							<StandardListItem title="{i18n>Nav.home}" icon="sap-icon://home" type="Navigation" press="onPressGoToHome"/>
-							<StandardListItem title="{i18n>Nav.datasets}" icon="sap-icon://table-chart" type="Navigation" press="onPressGoToDatasets"/>
-							<StandardListItem title="{i18n>Nav.upload}" icon="sap-icon://upload" type="Navigation" press="onPressGoToUpload"/>
+							<StandardListItem
+								title="{i18n>Nav.home}"
+								icon="sap-icon://home"
+								type="Navigation"
+								press="onPressGoToHome"/>
+							<StandardListItem
+								title="{i18n>Nav.datasets}"
+								icon="sap-icon://table-chart"
+								type="Navigation"
+								press="onPressGoToDatasets"/>
+							<StandardListItem
+								id="itemNavUpload"
+								title="{i18n>Nav.upload}"
+								icon="sap-icon://upload"
+								type="Navigation"
+								press="onPressGoToUpload"/>
 						</items>
 					</List>
 				</content>

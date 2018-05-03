@@ -6,8 +6,10 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  */
 sap.ui.define([
-    "com/sap/ml/data/pool/controller/BaseController"
-], function(BaseController) {
+    "com/sap/ml/data/pool/controller/BaseController",
+	"com/sap/ml/data/pool/service/SessionService",
+	"com/sap/ml/data/pool/service/AdminService"
+], function(BaseController, SessionService, AdminService) {
     "use strict";
 
     var self;
@@ -16,16 +18,16 @@ sap.ui.define([
 
         /**
          * onInit function.
-         * Sets the content density class for the app.
-         * Sets the session model.
          */
         onInit: function() {
-            self  = this;
+            self = this;
 			
-			// add content density class
-            /*this.getView().addStyleClass(
-                this.getOwnerComponent().getContentDensityClass()
-            );*/
+			new AdminService().isAdmin(function() {},
+			function() {
+				// hide upload section if user is no admin
+				var oListItemUpload = self.getView().byId("itemNavUpload");
+				oListItemUpload.setVisible(false);
+			});
         },
 		
 		/*
@@ -42,6 +44,13 @@ sap.ui.define([
 		
 		onPressGoToUpload: function(oEvent) {
 			this.getRouter().navTo("upload");
+		},
+		
+		onPressLogout: function(oEvent) {
+			new SessionService().logout(
+                function() {location.reload();},
+                function() {location.reload();}
+            );
 		}
-	})
+	});
 });

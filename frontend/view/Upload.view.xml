@@ -8,7 +8,7 @@
 		title="{i18n>Upload.page.header}"
 		class="sapUiResponsiveContentPadding">
 		<content>
-			<l:VerticalLayout>
+			<l:VerticalLayout width="100%">
 				<u:FileUploader
 					id="fileUploader"
 					name="myFileUpload"
@@ -17,8 +17,14 @@
 					typeMissmatch="handleTypeMissmatch"
 					style="Emphasized"
 					fileType="zip"
-					placeholder="{i18n>Upload.fileuploader.placeholder}">
+					placeholder="{i18n>Upload.fileuploader.placeholder}"
+					width="100%">
 				</u:FileUploader>
+				<TextArea
+					id="descriptionTextArea"
+					rows="10"
+					placeholder="{i18n>Upload.textarea.placeholder}"
+					width="100%"/>
 				<Button
 					text="{i18n>Upload.button.text}"
 					press="handleUploadPress"/>

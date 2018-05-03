@@ -1,6 +1,6 @@
 /**
- * AdminService.
- * 27.04.2018
+ * SessionService.
+ * 03.05.2018
  *
  * @author D062271
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -11,7 +11,7 @@ sap.ui.define([
 ], function(UI5Object, Http) {
     "use strict";
 
-    return UI5Object.extend("com.sap.ml.data.pool.service.AdminService", {
+    return UI5Object.extend("com.sap.ml.data.pool.service.SessionService", {
 
         /**
          * Constructor.
@@ -21,13 +21,13 @@ sap.ui.define([
         },
 
         /**
-         * Checks if a user is admin.
+         * Logs current user out.
          *
          * @param fSuccess (callback in case of success)
          * @param fError (callback in case of error)
          */
-        isAdmin: function(fSuccess, fError) {
-            this._http.performGet("/isAdmin", fSuccess, fError);
+        logout: function(fSuccess, fError) {
+            this._http.performPost("/logout", fSuccess, fError);
         }
     });
 });

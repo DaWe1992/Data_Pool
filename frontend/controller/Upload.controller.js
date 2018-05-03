@@ -8,10 +8,11 @@
 sap.ui.define([
 	"com/sap/ml/data/pool/controller/BaseController",
 	"com/sap/ml/data/pool/service/AdminService",
+	"com/sap/ml/data/pool/service/DatasetService",
 	"jquery.sap.global",
 	"sap/m/MessageToast",
 	"sap/m/MessageBox"
-], function(BaseController, AdminService, jQuery, MessageToast, MessageBox) {
+], function(BaseController, AdminService, DatasetService, jQuery, MessageToast, MessageBox) {
 	"use strict";
 	
 	var self;
@@ -39,7 +40,7 @@ sap.ui.define([
 			);
 			
 			oView.byId("fileUploader").setValue("");
-			
+			oView.byId("descriptionTextArea").setValue("");
 		},
 
 		/**
@@ -48,19 +49,27 @@ sap.ui.define([
 		 * @param oEvent
 		 */
 		handleUploadPress: function(oEvent) {
-			var secret = prompt("Please enter the secret...");
-			
-			this._isAdmin(secret, function(res) {
+			this._isAdmin(function(res) {
 				// this is only executed if user is authorized
 				var oView = self.getView();
 				var oFileUploader = oView.byId("fileUploader");
-			
-				if(!oFileUploader.getValue()) {
+				
+				var sFileName = oFileUploader.getValue();
+				
+				// check if valid file was selected
+				if(!sFileName) {
 					MessageToast.show(
 						self.getTextById("Upload.error.no.file.selected")
 					);
 					return;
 				}
+				
+				// file was selected and user is authorized...
+				var oTextArea = oView.byId("descriptionTextArea");
+				var sDescription = oTextArea.getValue();
+				
+				new DatasetService().addDescription(sFileName, sDescription,
+				function() {}, function() {});
 				
 				// upload file
 				oFileUploader.upload();
@@ -79,13 +88,12 @@ sap.ui.define([
 		},
 		
 		/**
-		 * Checks if user is admin
-		 * and is allowed to visit upload page.
+		 * Checks if user is admin.
 		 *
 		 * @param fCallback
 		 */
-		_isAdmin: function(pw, fCallback) {
-			new AdminService().isAdmin(pw, function(res) {
+		_isAdmin: function(fCallback) {
+			new AdminService().isAdmin(function(res) {
 				fCallback(res)
 			}, function(res) {
 				MessageBox.error(self.getTextById("Upload.error.no.admin"));

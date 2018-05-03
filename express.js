@@ -9,43 +9,74 @@
 "use strict";
 
 // import necessary modules
-var path 	 = require("path");
-var http 	 = require("http");
-var express  = require("express");
-//var nodeSSPI = require("node-sspi");
-var config 	 = require("./config.js");
-var favicon  = require("serve-favicon");
-var busboy 	 = require("connect-busboy"); 
+
+// express, server, ...
+var express  		= require("express");
+var path 	 		= require("path");
+var http 	 		= require("http");
+
+// authentication and sessions
+var passport 		= require("passport");
+var flash 	 		= require("connect-flash");
+var expressSession 	= require("express-session");
+
+// misc
+var favicon  		= require("serve-favicon");
+var busboy 	 		= require("connect-busboy");
+var bodyParser 		= require("body-parser");
+var cookieParser 	= require("cookie-parser");
+
+// own modules
+var config 	 		= require("./config.js");
+var isAuthenticated = require("./passport/isAuthenticated.js");
+
+// ==============================================================
 
 // create express app
-var oApp 	= express();
+var oApp = express();
+
+// setup jade for authentication
+oApp.set("views", path.join(__dirname, "passport", "views"));
+oApp.set("view engine", "jade");
+
+// support JSON encoded bodies
+oApp.use(bodyParser.json());
+// support encoded bodies
+oApp.use(bodyParser.urlencoded({extended: true}));
+oApp.use(cookieParser());
 
 oApp.use(busboy());
+
+// initialize passport.js
+oApp.use(expressSession({
+    secret: config.session.secret,
+    resave: config.session.resave,
+    saveUninitialized: config.session.saveUninitialized,
+    cookie: {
+        maxAge: config.session.cookieMaxAge
+    }
+}));
+oApp.use(passport.initialize());
+oApp.use(passport.session());
+
+require("./passport/initPassport.js")(passport);
+
+// flash middleware to store messages in session
+oApp.use(flash());
+
+// include routes
+require("./routes/routes-datasets.js")(oApp);
+require("./routes/routes-admin.js")(oApp);
+require("./routes/routes-authentication.js")(oApp, passport);
 
 // serve favicon
 oApp.use(favicon(path.join(__dirname, "frontend", "img", "favicon.ico")));
 // serve static files in frontend(_sapui5) folder
 oApp.use(
-    express.static(
+    isAuthenticated, express.static(
         __dirname + "/frontend"
     )
 );
-
-// This code is used for SSO (not possible on linux...)
-// authentication using single-sign-on (SSO)
-/*oApp.use(function(oReq, oRes, fNext) {
-	var nodeSSPIObj = new nodeSSPI({
-		retrieveGroups: false
-	});
-	
-	nodeSSPIObj.authenticate(oReq, oRes, function(oErr) {
-		oRes.finished || fNext();
-	});
-});*/
-
-// include routes
-require("./routes/routes-datasets.js")(oApp);
-require("./routes/routes-admin.js")(oApp);
 
 // bind application to port
 http.createServer(oApp).listen(config.app.port, function() {

@@ -27,7 +27,9 @@ sap.ui.define([
 			var oView = this.getView();
 			
 			this._getDatasets(function(data) {
+				// set model
 				oView.setModel(new JSONModel(data));
+				
 				var oLabel = oView.byId("toolbarLabel");
 				oLabel.setText(
 					self.getTextById("Datasetlist.toolbar.text") + " " + data.length

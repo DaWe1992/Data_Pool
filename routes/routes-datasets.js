@@ -9,11 +9,16 @@
 "use strict";
 
 // import necessary modules
-var fs 		= require("fs");
-var path	= require("path");
-var utils 	= require("../utils/utils.js");
-var config 	= require("../config.js");
-var busboy 	= require("connect-busboy"); 
+var fs 				= require("fs");
+var path			= require("path");
+var rl 				= require("readline");
+var busboy 			= require("connect-busboy"); 
+
+// own modules
+var config 			= require("../config.js");
+var isAuthenticated = require("../passport/isAuthenticated.js");
+
+// ==============================================================
 
 module.exports = function(oApp) {
 
@@ -22,25 +27,28 @@ module.exports = function(oApp) {
      *
      * @name /datasets
      */
-    oApp.get("/datasets", function(oReq, oRes) {
+    oApp.get("/datasets", isAuthenticated, function(oReq, oRes) {
 		fs.readdir(config.app.dataset_root_path, function(oErr, aFiles) {
-			var resultArr = new Array()
+			var aResult = new Array()
 			
-			fs.readFile(config.app.dataset_description_path, "utf8", function(oErr, sData) {
-				sData = sData.replace("\n", "|-->|");
-				var aDescriptions = sData.split("|-->|");
+			// create a reader for the descriptions.txt file
+			var reader = rl.createInterface({
+				input: fs.createReadStream(config.app.dataset_description_path)
+			});
 			
-				aFiles.forEach(function(oFile) {
-					sDescription = aDescriptions[indexOf(oFile) + 1];
-				
-					resultArr.push({
-						"file_name": oFile,
-						"file_description": sDescription
-					});
+			// a line was read
+			reader.on("line", function(sLine) {
+				var aTokens = sLine.split("***");
+				aResult.push({
+					"file_name": aTokens[0],
+					"file_description": aTokens[1]
 				});
-				
+			});
+			
+			// finished reading the file
+			reader.on("close", function(){
 				return oRes.status(200).json({
-					"data": resultArr
+					"data": aResult
 				});
 			});
 		});
@@ -52,19 +60,20 @@ module.exports = function(oApp) {
      * @name /datasets/:file_name
 	 * @param file_name (obligatory)
      */
-	oApp.get("/datasets/:file_name", function(oReq, oRes) {
+	oApp.get("/datasets/:file_name", isAuthenticated, function(oReq, oRes) {
 		var sFileName = oReq.params.file_name;
 		var sPath = path.join(config.app.dataset_root_path, sFileName);
+		// statistics about file
 		var oStat = fs.statSync(sPath);
 		
 		oRes.writeHead(200, {
-			"Content-Type": "application/zip",
+			"Content-Type": "application/zip", // it is a *.zip file
 			"Content-Length": oStat.size,
 			"Content-disposition": "attachment; filename=dataset.zip"
 		});
 		
-		var oStream = fs.createReadStream(sPath);
-		oStream.pipe(oRes);
+		// pipe result into response
+		fs.createReadStream(sPath).pipe(oRes);
 	}),
 	
 	/**
@@ -72,18 +81,32 @@ module.exports = function(oApp) {
 	 *
 	 * @name /dataset
 	 */
-	oApp.post("/dataset", function(oReq, oRes) {
-		var oWriteStream;
+	oApp.post("/dataset", isAuthenticated, function(oReq, oRes) {
 		oReq.pipe(oReq.busboy);
 	
-		oReq.busboy.on("file", function(sFieldname, oFile, sFilename) { 
-			oWriteStream = fs.createWriteStream(
+		oReq.busboy.on("file", function(sFieldname, oFile, sFilename) {
+			// if a new file arrives => create write stream
+			var oWriteStream = fs.createWriteStream(
 				path.join(config.app.dataset_root_path, sFilename)
 			);
+			
 			oFile.pipe(oWriteStream);
 			oWriteStream.on("close", function() {
 				oRes.redirect("back");
 			});
 		});
+	});
+	
+	/**
+	 * Posts a new dataset description to the server.
+	 *
+	 * @name /addDescription
+	 */
+	oApp.post("/addDescription", isAuthenticated, function(oReq, oRes) {
+		var sFileName = oReq.body.file_name;
+		var sDescription = oReq.body.file_description;
+		
+		fs.appendFile(config.app.dataset_description_path,
+		sFileName + "***" + sDescription + "\n", function(oErr) {/* DO NOTHING */});
 	});
 };
