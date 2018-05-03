@@ -107,6 +107,6 @@ module.exports = function(oApp) {
 		var sDescription = oReq.body.file_description;
 		
 		fs.appendFile(config.app.dataset_description_path,
-		sFileName + "***" + sDescription + "\n", function(oErr) {/* DO NOTHING */});
+		"\n" + sFileName + "***" + sDescription, function(oErr) {/* DO NOTHING */});
 	});
 };
