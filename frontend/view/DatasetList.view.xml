@@ -17,8 +17,10 @@
 				items="{path: '/'}"
 				height="100%">
 				<items>
-					<CustomListItem press="onDatasetItemPress">
-						<HBox width="100%">
+					<CustomListItem>
+						<VBox
+							width="95%"
+							class="sapUiTinyMarginBegin sapUiSmallMarginTopBottom">
 							<HBox width="25%">
 								<core:Icon
 									src="sap-icon://table-chart"
@@ -28,20 +30,25 @@
 									<Label
 										text="{file_name}"
 										class="bold"/>
-									<Link
-										text="{i18n>Datasetlist.download}"
-										href="/datasets/{file_name}"
-										class="underline"/>
+									<HBox>
+										<Link
+											text="{i18n>Datasetlist.download}"
+											href="/datasets/{file_name}"
+											class="underline"/>
+										<Text
+											text="|"
+											class="sapUiTinyMarginBegin sapUiTinyMarginEnd"/>
+										<Link
+											text="{i18n>Datasetlist.delete}"
+											press="onDeleteDataset"
+											class="underline"/>
+									</HBox>
 								</VBox>
 							</HBox>
-							<VBox
-								width="65%"
-								class="sapUiLargeMarginBegin sapUiSmallMarginTopBottom">
-								<Text
-									text="{file_description}"
-									class="italic justify"/>
-							</VBox>
-						</HBox>
+							<Text
+								text="{file_description}"
+								class="italic justify sapUiSmallMarginBegin"/>
+						</VBox>
 					</CustomListItem>
 				</items>
 				<infoToolbar>

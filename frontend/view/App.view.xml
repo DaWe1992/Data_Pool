@@ -12,11 +12,6 @@
 				title="{i18n>Nav}"
 				icon="sap-icon://action"
 				class="sapUiStdPage">
-				<headerContent>
-					<Button
-						icon="sap-icon://log"
-						press="onPressLogout"/>
-				</headerContent>
 				<content>
 					<List>
 						<items>
@@ -36,6 +31,10 @@
 								icon="sap-icon://upload"
 								type="Navigation"
 								press="onPressGoToUpload"/>
+							<ActionListItem
+								id="itemNavLogout"
+								text="{i18n>Nav.logout}"
+								press="onPressLogout"/>
 						</items>
 					</List>
 				</content>
