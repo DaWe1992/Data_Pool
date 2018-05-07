@@ -10,7 +10,7 @@
 
 // definition of users
 var aUsers = [
-	{id: 1, username: "admin", password: "admin"},
+	{id: 1, username: "admin", password: "m@chin€Learning"},
 	{id: 2, username: "user", password: "user"}
 ];
 
