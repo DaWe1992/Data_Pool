@@ -1,6 +1,7 @@
 <core:View
 	controllerName="com.sap.ml.data.pool.controller.DatasetList"
 	xmlns="sap.m" xmlns:core="sap.ui.core"
+	xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
 	height="100%">
 	
 	<Page title="{i18n>Datasetlist.page.header}">
@@ -41,6 +42,7 @@
 										<Link
 											text="{i18n>Datasetlist.delete}"
 											press="onDeleteDataset"
+											app:file_id="{file_id}"
 											class="underline"/>
 									</HBox>
 								</VBox>

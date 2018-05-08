@@ -61,7 +61,26 @@ sap.ui.define([
 			var oView = this.getView();
 			var oLabel = oView.byId("toolbarLabel");
 			oLabel.setText(
-				self.getTextById("Datasetlist.toolbar.text") + " " + binding.aIndices.length
+				this.getTextById("Datasetlist.toolbar.text") + " " + binding.aIndices.length
+			);
+		},
+		
+		/**
+		 * Deletes a dataset.
+		 *
+		 * @param oEvent
+		 */
+		onDeleteDataset: function(oEvent) {
+			var sId = oEvent.getSource().data("file_id");
+			
+			MessageBox.confirm(
+				this.getTextById("Datasetlist.delete.warning"), {
+					onClose : function(sButton) {
+						if (sButton === MessageBox.Action.OK) {
+							self._deleteDataset(sId);
+						};
+					}
+				}
 			);
 		},
 		
@@ -76,6 +95,20 @@ sap.ui.define([
             }, function(res) {
                 MessageBox.error(this.getTextById("Misc.error.data.load"));
             });
-        }
+        },
+		
+		/**
+		 * Deletes the dataset.
+		 *
+		 * @param sId (id of dataset to be deleted)
+		 */
+		_deleteDataset: function(sId) {
+			// Delete dataset
+			new DatasetService().deleteDataset(
+				sId,
+				function() {},
+				function() {}
+			);	
+		}
 	});
 });

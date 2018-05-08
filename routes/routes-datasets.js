@@ -40,8 +40,9 @@ module.exports = function(oApp) {
 			reader.on("line", function(sLine) {
 				var aTokens = sLine.split("***");
 				aResult.push({
-					"file_name": aTokens[0],
-					"file_description": aTokens[1]
+					"file_id": aTokens[0],
+					"file_name": aTokens[1],
+					"file_description": aTokens[2]
 				});
 			});
 			

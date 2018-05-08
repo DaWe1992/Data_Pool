@@ -24,5 +24,12 @@ module.exports = {
         resave: true,
         saveUninitialized: true,
         cookieMaxAge: 7200000 // delete the session cookie after two hours
+    },
+	postgres: {
+        user: "postgres",
+        host: "localhost",
+        database: "db_data_pool",
+        password: "admin",
+        port: 5432,
     }
 };

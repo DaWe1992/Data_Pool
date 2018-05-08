@@ -42,7 +42,18 @@ sap.ui.define([
 			this._http.performPost("/addDescription", {
 				"file_name": sFileName,
 				"file_description": sDescription
-			}, fSuccess, fError)
+			}, fSuccess, fError);
+		},
+		
+		/**
+		 * Deletes the dataset specified.
+		 *
+		 * @param sId (id of dataset to be deleted)
+		 * @param fSuccess (callback in case of success)
+		 * @param fError (callback in case of error)
+		 */
+		deleteDataset: function(sId, fSuccess, fError) {
+			this._http.performDelete("/deleteDataset/:id", fSuccess, fError);
 		}
     });
 });
