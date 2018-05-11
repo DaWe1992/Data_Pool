@@ -35,11 +35,7 @@ module.exports = function(oApp) {
 			var sSql = "SELECT * FROM datasets;";
 
 			postgres.query(sSql, function(oErr, oResult) {
-				if(oErr) {
-					return oRes.status(500).json({
-						"err": oErr
-					});
-				}
+				if(oErr) {return oRes.status(500).json({"err": oErr});}
 
 				return oRes.status(200).json({
 					"data": oResult.rows
@@ -105,11 +101,7 @@ module.exports = function(oApp) {
 		+ sFileName + "', '" + sDescription + "')";
 		
 		postgres.query(sSql, function(oErr, oResult) {
-			if(oErr) {
-				return oRes.status(500).json({
-					"err": oErr
-				});
-			}
+			if(oErr) {return oRes.status(500).json({"err": oErr});}
 
 			return oRes.status(200).json({
 				"status": "ok"
@@ -126,21 +118,26 @@ module.exports = function(oApp) {
 	oApp.delete("/dataset/:file_id", isAuthenticated, function(oReq, oRes) {
 		var sId = oReq.params.file_id;
 		
-		// sql statement to delete dataset
-		var sSql = "DELETE FROM datasets WHERE file_id = '" + sId + "';";
+		// get file name of file with id specified
+		var sSql = "SELECT file_name FROM datasets WHERE file_id = '" + sId + "';";
 		
 		postgres.query(sSql, function(oErr, oResult) {
-			if(oErr) {
-				return oRes.status(500).json({
-					"err": oErr
-				});
-			}
+			if(oErr) {/* ERROR HANDLING */}
+			var sFileName = oResult.rows[0].file_name;
 			
-			// delete *.zip file from file system
-			//...
-
-			return oRes.status(200).json({
-				"status": "ok"
+			// sql statement to delete dataset
+			var sSql = "DELETE FROM datasets WHERE file_id = '" + sId + "';";
+			
+			postgres.query(sSql, function(oErr, oResult) {
+				if(oErr) {return oRes.status(500).json({"err": oErr});}
+				
+				// delete *.zip file from file system
+				fs.unlink(path.join(config.app.dataset_root_path, sFileName), function(err) {
+					if(err) return console.log(err);
+					return oRes.status(200).json({
+						"status": "ok"
+					});
+				}); 
 			});
 		});
 	});
