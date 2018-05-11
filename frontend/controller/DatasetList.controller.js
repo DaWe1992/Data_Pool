@@ -8,10 +8,11 @@
 sap.ui.define([
 	"com/sap/ml/data/pool/controller/BaseController",
 	"com/sap/ml/data/pool/service/DatasetService",
+	"com/sap/ml/data/pool/service/AdminService",
 	"sap/ui/model/json/JSONModel",
 	"sap/ui/model/Filter",
 	"sap/m/MessageBox"
-], function(BaseController, DatasetService, JSONModel, Filter, MessageBox) {
+], function(BaseController, DatasetService, AdminService, JSONModel, Filter, MessageBox) {
 	"use strict";
 	
 	var self;
@@ -47,6 +48,7 @@ sap.ui.define([
 			// add filter for search
 			var aFilters = [];
 			var sQuery = oEvent.getSource().getValue();
+			
 			if(sQuery && sQuery.length > 0) {
 				var oFilter = new Filter("file_name", sap.ui.model.FilterOperator.Contains, sQuery);
 				aFilters.push(oFilter);
@@ -73,15 +75,22 @@ sap.ui.define([
 		onDeleteDataset: function(oEvent) {
 			var sId = oEvent.getSource().data("file_id");
 			
-			MessageBox.confirm(
-				this.getTextById("Datasetlist.delete.warning"), {
+			// check if user has admin permissions
+			new AdminService().isAdmin(function() {
+				// has permission...
+				MessageBox.confirm(
+				self.getTextById("Datasetlist.delete.warning"), {
 					onClose: function(sButton) {
 						if (sButton === MessageBox.Action.OK) {
 							self._deleteDataset(sId);
 						};
 					}
-				}
-			);
+				});
+			},
+			function() {
+				// doesn't have permission...
+				MessageBox.error(self.getTextById("Misc.error.no.admin"));
+			});
 		},
 		
 		/**

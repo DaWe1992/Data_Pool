@@ -16,7 +16,8 @@
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "pg": "^7.4.3",
-    "serve-favicon": "^2.3.0"
+    "serve-favicon": "^2.3.0",
+    "sqlstring": "^2.3.1"
   },
   "scripts": {
     "start": "node server.js",

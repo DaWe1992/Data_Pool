@@ -43,7 +43,7 @@
 											text="{i18n>Datasetlist.delete}"
 											press="onDeleteDataset"
 											app:file_id="{file_id}"
-											class="underline"/>
+											class="underline admin"/>
 									</HBox>
 								</VBox>
 							</HBox>

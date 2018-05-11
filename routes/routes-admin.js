@@ -24,7 +24,7 @@ module.exports = function(oApp) {
 		if(oReq.user.username == "admin") {
 			oRes.status(200).send("Accepted");
 		} else {
-			oRes.status(400).send("Rejected");
+			oRes.status(403).send("Rejected");
 		}
 	});
 };

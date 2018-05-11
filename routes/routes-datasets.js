@@ -9,15 +9,17 @@
 "use strict";
 
 // import necessary modules
-var fs 				= require("fs");
-var path			= require("path");
-var rl 				= require("readline");
-var busboy 			= require("connect-busboy"); 
+var fs 					 = require("fs");
+var path				 = require("path");
+var rl 					 = require("readline");
+var busboy 				 = require("connect-busboy");
+var sqlstring 			 = require("sqlstring");
 
 // own modules
-var config 			= require("../config.js");
-var postgres 		= require("../postgres/postgres.js");
-var isAuthenticated = require("../passport/isAuthenticated.js");
+var config 				 = require("../config.js");
+var postgres 			 = require("../postgres/postgres.js");
+var isAuthenticated 	 = require("../passport/isAuthenticated.js");
+var isAuthenticatedAdmin = require("../passport/isAuthenticatedAdmin.js");
 
 // ==============================================================
 
@@ -71,7 +73,7 @@ module.exports = function(oApp) {
 	 *
 	 * @name /dataset
 	 */
-	oApp.post("/dataset", isAuthenticated, function(oReq, oRes) {
+	oApp.post("/dataset", isAuthenticatedAdmin, function(oReq, oRes) {
 		oReq.pipe(oReq.busboy);
 	
 		oReq.busboy.on("file", function(sFieldname, oFile, sFilename) {
@@ -92,13 +94,13 @@ module.exports = function(oApp) {
 	 *
 	 * @name /addDescription
 	 */
-	oApp.post("/addDescription", isAuthenticated, function(oReq, oRes) {
+	oApp.post("/addDescription", isAuthenticatedAdmin, function(oReq, oRes) {
 		var sFileName = oReq.body.file_name;
 		var sDescription = oReq.body.file_description;
 		
 		// insert new dataset into database
-		var sSql = "INSERT INTO datasets (file_name, file_description) VALUES ('"
-		+ sFileName + "', '" + sDescription + "')";
+		var sSql = "INSERT INTO datasets (file_name, file_description) VALUES (" +
+		sqlstring.escape(sFileName) + ", " + sqlstring.escape(sDescription) + ");";
 		
 		postgres.query(sSql, function(oErr, oResult) {
 			if(oErr) {return oRes.status(500).json({"err": oErr});}
@@ -115,19 +117,19 @@ module.exports = function(oApp) {
 	 * @name /dataset/:file_id
 	 * @param file_id (obligatory)
 	 */
-	oApp.delete("/dataset/:file_id", isAuthenticated, function(oReq, oRes) {
+	oApp.delete("/dataset/:file_id", isAuthenticatedAdmin, function(oReq, oRes) {
 		var sId = oReq.params.file_id;
 		
 		// get file name of file with id specified
-		var sSql = "SELECT file_name FROM datasets WHERE file_id = '"
-		+ sId + "';";
+		var sSql = "SELECT file_name FROM datasets WHERE file_id = " +
+		sqlstring.escape(sId) + ";";
 		
 		postgres.query(sSql, function(oErr, oResult) {
 			if(oErr) {return oRes.status(500).json({"err": oErr});}
 			
 			var sFileName = oResult.rows[0].file_name;
-			var sSql = "DELETE FROM datasets WHERE file_id = '"
-			+ sId + "';";
+			var sSql = "DELETE FROM datasets WHERE file_id = " +
+			sqlstring.escape(sId) + ";";
 			
 			// delete dataset entry from database
 			postgres.query(sSql, function(oErr, oResult) {

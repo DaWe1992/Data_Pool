@@ -9,10 +9,9 @@ sap.ui.define([
 	"com/sap/ml/data/pool/controller/BaseController",
 	"com/sap/ml/data/pool/service/AdminService",
 	"com/sap/ml/data/pool/service/DatasetService",
-	"jquery.sap.global",
 	"sap/m/MessageToast",
 	"sap/m/MessageBox"
-], function(BaseController, AdminService, DatasetService, jQuery, MessageToast, MessageBox) {
+], function(BaseController, AdminService, DatasetService, MessageToast, MessageBox) {
 	"use strict";
 	
 	var self;
@@ -96,7 +95,7 @@ sap.ui.define([
 			new AdminService().isAdmin(function(res) {
 				fCallback(res)
 			}, function(res) {
-				MessageBox.error(self.getTextById("Upload.error.no.admin"));
+				MessageBox.error(self.getTextById("Misc.error.no.admin"));
 			});
 		}
 	});
