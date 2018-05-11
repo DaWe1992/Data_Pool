@@ -35,6 +35,9 @@ var isAuthenticated = require("./passport/isAuthenticated.js");
 // create express app
 var oApp = express();
 
+// set up postgres tables
+require("./postgres/postgres_setup.js")();
+
 // setup jade for authentication
 oApp.set("views", path.join(__dirname, "passport", "views"));
 oApp.set("view engine", "jade");

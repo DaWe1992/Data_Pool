@@ -16,6 +16,7 @@ var busboy 			= require("connect-busboy");
 
 // own modules
 var config 			= require("../config.js");
+var postgres 		= require("../postgres/postgres.js");
 var isAuthenticated = require("../passport/isAuthenticated.js");
 
 // ==============================================================
@@ -29,27 +30,19 @@ module.exports = function(oApp) {
      */
     oApp.get("/datasets", isAuthenticated, function(oReq, oRes) {
 		fs.readdir(config.app.dataset_root_path, function(oErr, aFiles) {
-			var aResult = new Array()
+			//var aResult = new Array()
 			
-			// create a reader for the descriptions.txt file
-			var reader = rl.createInterface({
-				input: fs.createReadStream(config.app.dataset_description_path)
-			});
-			
-			// a line was read
-			reader.on("line", function(sLine) {
-				var aTokens = sLine.split("***");
-				aResult.push({
-					"file_id": aTokens[0],
-					"file_name": aTokens[1],
-					"file_description": aTokens[2]
-				});
-			});
-			
-			// finished reading the file
-			reader.on("close", function(){
+			var sSql = "SELECT * FROM datasets;";
+
+			postgres.query(sSql, function(oErr, oResult) {
+				if(oErr) {
+					return oRes.status(500).json({
+						"err": oErr
+					});
+				}
+
 				return oRes.status(200).json({
-					"data": aResult
+					"data": oResult.rows
 				});
 			});
 		});
@@ -107,7 +100,48 @@ module.exports = function(oApp) {
 		var sFileName = oReq.body.file_name;
 		var sDescription = oReq.body.file_description;
 		
-		fs.appendFile(config.app.dataset_description_path,
-		"\n" + sFileName + "***" + sDescription, function(oErr) {/* DO NOTHING */});
+		// insert new dataset into database
+		var sSql = "INSERT INTO datasets (file_name, file_description) VALUES ('"
+		+ sFileName + "', '" + sDescription + "')";
+		
+		postgres.query(sSql, function(oErr, oResult) {
+			if(oErr) {
+				return oRes.status(500).json({
+					"err": oErr
+				});
+			}
+
+			return oRes.status(200).json({
+				"status": "ok"
+			});
+		});
+	});
+	
+	/**
+	 * Deletes a dataset from the server.
+	 *
+	 * @name /dataset/:file_id
+	 * @param file_id (obligatory)
+	 */
+	oApp.delete("/dataset/:file_id", isAuthenticated, function(oReq, oRes) {
+		var sId = oReq.params.file_id;
+		
+		// sql statement to delete dataset
+		var sSql = "DELETE FROM datasets WHERE file_id = '" + sId + "';";
+		
+		postgres.query(sSql, function(oErr, oResult) {
+			if(oErr) {
+				return oRes.status(500).json({
+					"err": oErr
+				});
+			}
+			
+			// delete *.zip file from file system
+			//...
+
+			return oRes.status(200).json({
+				"status": "ok"
+			});
+		});
 	});
 };

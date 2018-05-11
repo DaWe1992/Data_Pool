@@ -53,7 +53,7 @@ sap.ui.define([
 		 * @param fError (callback in case of error)
 		 */
 		deleteDataset: function(sId, fSuccess, fError) {
-			this._http.performDelete("/deleteDataset/:id", fSuccess, fError);
+			this._http.performDelete("/dataset/" + sId, fSuccess, fError);
 		}
     });
 });

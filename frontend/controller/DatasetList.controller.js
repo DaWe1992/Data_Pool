@@ -75,7 +75,7 @@ sap.ui.define([
 			
 			MessageBox.confirm(
 				this.getTextById("Datasetlist.delete.warning"), {
-					onClose : function(sButton) {
+					onClose: function(sButton) {
 						if (sButton === MessageBox.Action.OK) {
 							self._deleteDataset(sId);
 						};
