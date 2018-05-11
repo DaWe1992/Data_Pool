@@ -119,21 +119,32 @@ module.exports = function(oApp) {
 		var sId = oReq.params.file_id;
 		
 		// get file name of file with id specified
-		var sSql = "SELECT file_name FROM datasets WHERE file_id = '" + sId + "';";
+		var sSql = "SELECT file_name FROM datasets WHERE file_id = '"
+		+ sId + "';";
 		
 		postgres.query(sSql, function(oErr, oResult) {
-			if(oErr) {/* ERROR HANDLING */}
+			if(oErr) {return oRes.status(500).json({"err": oErr});}
+			
 			var sFileName = oResult.rows[0].file_name;
+			var sSql = "DELETE FROM datasets WHERE file_id = '"
+			+ sId + "';";
 			
-			// sql statement to delete dataset
-			var sSql = "DELETE FROM datasets WHERE file_id = '" + sId + "';";
-			
+			// delete dataset entry from database
 			postgres.query(sSql, function(oErr, oResult) {
 				if(oErr) {return oRes.status(500).json({"err": oErr});}
 				
 				// delete *.zip file from file system
-				fs.unlink(path.join(config.app.dataset_root_path, sFileName), function(err) {
-					if(err) return console.log(err);
+				fs.unlink(path.join(
+					config.app.dataset_root_path, sFileName
+				), function(err) {
+					if(err) {
+						return oRes.status(500).json({
+							"err": oErr
+						});
+						
+						// TODO: actually we would have to restore
+						// the database entry here...
+					}
 					return oRes.status(200).json({
 						"status": "ok"
 					});
