@@ -15,7 +15,7 @@ var path = require("path")
 module.exports = {
     app: {
         port: 8080,
-		dataset_root_path: path.join(__dirname, "__DATA__", "datasets")
+		dataset_root_path: path.join(__dirname, "__DATA__", "datasets") // path.join("/", "mnt", "aoa_share", "__DATA__")
     },
     session: {
         secret: "mySecretKey",

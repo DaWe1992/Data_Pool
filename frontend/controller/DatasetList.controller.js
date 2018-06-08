@@ -55,15 +55,15 @@ sap.ui.define([
 			}
 
 			// update list binding
-			var list = this.byId("datasetList");
-			var binding = list.getBinding("items");
-			binding.filter(aFilters, "Application");
+			var oList = this.byId("datasetList");
+			var oBinding = oList.getBinding("items");
+			oBinding.filter(aFilters, "Application");
 			
 			// update toolbar label
 			var oView = this.getView();
 			var oLabel = oView.byId("toolbarLabel");
 			oLabel.setText(
-				this.getTextById("Datasetlist.toolbar.text") + " " + binding.aIndices.length
+				this.getTextById("Datasetlist.toolbar.text") + " " + oBinding.aIndices.length
 			);
 		},
 		
@@ -83,6 +83,19 @@ sap.ui.define([
 					onClose: function(sButton) {
 						if(sButton === MessageBox.Action.OK) {
 							self._deleteDataset(sId);
+							
+							// delete entry from binding
+							var oModel = self.getView().getModel();
+							var oData = oModel.oData;
+							
+							for(var i = 0; i < oData.length; i++) {
+								var oItem = oData[i];
+								if(oItem.file_id == sId) {
+									oData.splice(i, 1);
+									oModel.setData(oData);
+									break;
+								}
+							}
 						};
 					}
 				});
