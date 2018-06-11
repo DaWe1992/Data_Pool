@@ -100,7 +100,7 @@ sap.ui.define([
 							
 							var oLabel = oView.byId("toolbarLabel");
 							oLabel.setText(
-								this.getTextById("Datasetlist.toolbar.text") + " " + oData.length
+								self.getTextById("Datasetlist.toolbar.text") + " " + oData.length
 							);
 						}
 					}
