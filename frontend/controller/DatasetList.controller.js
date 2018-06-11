@@ -85,7 +85,8 @@ sap.ui.define([
 							self._deleteDataset(sId);
 							
 							// delete entry from binding
-							var oModel = self.getView().getModel();
+							var oView = self.getView();
+							var oModel = oView.getModel();
 							var oData = oModel.oData;
 							
 							for(var i = 0; i < oData.length; i++) {
@@ -96,7 +97,12 @@ sap.ui.define([
 									break;
 								}
 							}
-						};
+							
+							var oLabel = oView.byId("toolbarLabel");
+							oLabel.setText(
+								this.getTextById("Datasetlist.toolbar.text") + " " + oData.length
+							);
+						}
 					}
 				});
 			},
