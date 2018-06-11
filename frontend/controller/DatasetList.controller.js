@@ -91,6 +91,8 @@ sap.ui.define([
 							
 							for(var i = 0; i < oData.length; i++) {
 								var oItem = oData[i];
+								
+								// item to be deleted found
 								if(oItem.file_id == sId) {
 									oData.splice(i, 1);
 									oModel.setData(oData);
@@ -98,6 +100,7 @@ sap.ui.define([
 								}
 							}
 							
+							// update toolbar label
 							var oLabel = oView.byId("toolbarLabel");
 							oLabel.setText(
 								self.getTextById("Datasetlist.toolbar.text") + " " + oData.length
