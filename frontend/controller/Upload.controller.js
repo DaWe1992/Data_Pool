@@ -2,6 +2,9 @@
  * UploadController.
  * 27.04.2018
  *
+ * Update/Change-Log:
+ * 26.07.2018: Changed upload file name: Added prefix "AOA_<timestamp>__"
+ *
  * @author D062271
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  */
@@ -53,7 +56,7 @@ sap.ui.define([
 				var oView = self.getView();
 				var oFileUploader = oView.byId("fileUploader");
 				
-				var sFileName = oFileUploader.getValue();
+				var sFileName = "AOA_" + Date.now() + "_" + oFileUploader.getValue();
 				
 				// check if valid file was selected
 				if(!sFileName) {
@@ -71,6 +74,8 @@ sap.ui.define([
 				function() {}, function() {});
 				
 				// upload file
+				// @see https://archive.sap.com/discussions/thread/3505017
+				oFileUploader.setUploadUrl("/dataset" + "?file_name=" + sFileName);
 				oFileUploader.upload();
 			});
 		},

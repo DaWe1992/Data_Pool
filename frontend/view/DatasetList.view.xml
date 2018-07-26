@@ -1,3 +1,12 @@
+<!--
+View DataSetList.
+27.04.2018
+
+Update/Change-Log:
+26.07.2018: Added label which displays file size
+
+@author D062271
+-->
 <core:View
 	controllerName="com.sap.ml.data.pool.controller.DatasetList"
 	xmlns="sap.m" xmlns:core="sap.ui.core"
@@ -31,6 +40,9 @@
 									<Label
 										text="{file_name}"
 										class="bold"/>
+									<Label
+										text="Size: {file_size_mb} MB"
+										class="italic"/>
 									<HBox>
 										<Link
 											text="{i18n>Datasetlist.download}"

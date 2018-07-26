@@ -2,6 +2,10 @@
  * Routes dataset.
  * 27.04.2018
  *
+ * Update/Change-Log:
+ * 26.07.2018: Altered "/datasets" route such that it also returns file sizes
+ *             Also fixed naming of downloaded file (was dataset.zip per default)
+ *
  * @author D062271
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  */
@@ -12,8 +16,8 @@
 var fs 					 = require("fs");
 var path				 = require("path");
 var rl 					 = require("readline");
-var busboy 				 = require("connect-busboy");
 var sqlstring 			 = require("sqlstring");
+var busboy 				 = require("connect-busboy");
 
 // own modules
 var config 				 = require("../config.js");
@@ -32,12 +36,21 @@ module.exports = function(oApp) {
      */
     oApp.get("/datasets", isAuthenticated, function(oReq, oRes) {
 		fs.readdir(config.app.dataset_root_path, function(oErr, aFiles) {
-			//var aResult = new Array()
 			
 			var sSql = "SELECT * FROM datasets;";
 
 			postgres.query(sSql, function(oErr, oResult) {
 				if(oErr) {return oRes.status(500).json({"err": oErr});}
+				
+				// read file size from file system
+				for(var i = 0; i < oResult.rows.length; i++) {
+					var sFileName = path.join(config.app.dataset_root_path, oResult.rows[i].file_name);
+					
+					var oStats = fs.statSync(sFileName);
+					var dFileSizeInBytes = oStats.size
+					// convert file size to megabytes
+					oResult.rows[i].file_size_mb = dFileSizeInBytes / 1000000.0
+				}
 
 				return oRes.status(200).json({
 					"data": oResult.rows
@@ -61,7 +74,7 @@ module.exports = function(oApp) {
 		oRes.writeHead(200, {
 			"Content-Type": "application/zip", // it is a *.zip file
 			"Content-Length": oStat.size,
-			"Content-disposition": "attachment; filename=dataset.zip"
+			"Content-disposition": "attachment; filename=" + sFileName
 		});
 		
 		// pipe result into response
@@ -76,10 +89,10 @@ module.exports = function(oApp) {
 	oApp.post("/dataset", isAuthenticatedAdmin, function(oReq, oRes) {
 		oReq.pipe(oReq.busboy);
 	
-		oReq.busboy.on("file", function(sFieldname, oFile, sFilename) {
+		oReq.busboy.on("file", function(sFieldname, oFile, sFileName) {
 			// if a new file arrives => create write stream
 			var oWriteStream = fs.createWriteStream(
-				path.join(config.app.dataset_root_path, sFilename)
+				path.join(config.app.dataset_root_path, sFileName)
 			);
 			
 			oFile.pipe(oWriteStream);

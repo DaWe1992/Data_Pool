@@ -1,3 +1,11 @@
+<!--
+View Upload.
+27.04.2018
+
+Update/Change-Log:
+
+@author D062271
+-->
 <core:View
 	controllerName="com.sap.ml.data.pool.controller.Upload"
 	xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:l="sap.ui.layout"

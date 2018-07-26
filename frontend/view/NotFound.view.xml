@@ -1,3 +1,11 @@
+<!--
+View NotFound.
+27.04.2018
+
+Update/Change-Log:
+
+@author D062271
+-->
 <mvc:View
 	controllerName="com.sap.ml.data.pool.controller.NotFound"
 	xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc">

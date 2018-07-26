@@ -1,0 +1,45 @@
+Install NodeJS:
+===============
+
+Install packages from YaST:
+- nodejs6
+- nodejs6-devel
+- nodejs6-docs
+- npm6
+
+Install PostgreSQL on Suse Linux:
+=================================
+https://dalanzg.github.io/tips-tutorials/opensuse/2017/07/31/how-to-install-postgresql-in-opensuse/
+
+Install packages from YaST:
+- pgadmin3
+- postgresql
+- postgresql-contrib
+- postgresql-init
+- postgresql-server
+- postgresql96
+- postgresql96-contrib
+- postgresql96-server
+
+Authentication PostgreSQL:
+==========================
+https://www.cyberciti.biz/faq/psql-fatal-ident-authentication-failed-for-user/
+
+Change file to this:
+# TYPE  DATABASE        USER            ADDRESS                 METHOD
+
+# "local" is for Unix domain socket connections only
+local   all             all                                     peer
+# IPv4 local connections:
+host    all             all             127.0.0.1/32            trust
+# IPv6 local connections:
+host    all             all             ::1/128                 trust
+
+Mount network drive
+===================
+sudo mount //DEWDFG102.wdf.global.corp.sap/AOA -t cifs /mnt/aoa_share -o "username=d062271"
+
+Start application:
+==================
+sudo npm start
+
