@@ -14,6 +14,8 @@
  *
  *             Added routes to update the description of a data set
  *
+ *             Begin implementation of logging
+ *
  *
  * @author D062271
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -46,7 +48,7 @@ module.exports = function(oApp) {
     oApp.get("/datasets", isAuthenticated, function(oReq, oRes) {
 		fs.readdir(config.app.dataset_root_path, function(oErr, aFiles) {
 			
-			var sSql = "SELECT * FROM datasets ORDER BY file_id;";
+			var sSql = "SELECT * FROM datasets ORDER BY file_id DESC;";
 
 			postgres.query(sSql, function(oErr, oResult) {
 				if(oErr) {return oRes.status(500).json({"err": oErr});}
@@ -76,7 +78,7 @@ module.exports = function(oApp) {
 	}),
 	
 	/**
-     * Downloads file specified.
+     * Downloads the file specified.
      *
      * @name /datasets/:file_name
 	 * @param file_name (obligatory)
@@ -244,4 +246,13 @@ function formatTimestamp(oDate) {
 	
 	return sDay + "/" + sMonth + "/" + sYear +
 	" " + sHours + ":" + sMinutes + ":" + sSeconds;
+}
+
+/**
+ *
+ *
+ *
+ */
+function logDownload(oUser) {
+	
 }
