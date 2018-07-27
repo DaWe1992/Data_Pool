@@ -5,6 +5,8 @@
  * Update/Change-Log:
  * 26.07.2018: Changed upload file name: Added prefix "AOA_<timestamp>__"
  *
+ * 27.07.2018: Added busy indicator while uploading
+ *
  * @author D062271
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  */
@@ -43,6 +45,7 @@ sap.ui.define([
 			
 			oView.byId("fileUploader").setValue("");
 			oView.byId("descriptionTextArea").setValue("");
+			oView.byId("uploadPage").setBusy(false);
 		},
 
 		/**
@@ -65,6 +68,8 @@ sap.ui.define([
 					);
 					return;
 				}
+				
+				oView.byId("uploadPage").setBusy(true);
 				
 				// file was selected and user is authorized...
 				var oTextArea = oView.byId("descriptionTextArea");

@@ -13,6 +13,7 @@ Update/Change-Log:
 	height="100%">
 	
 	<Page
+		id="uploadPage"
 		title="{i18n>Upload.page.header}"
 		class="sapUiResponsiveContentPadding">
 		<content>
