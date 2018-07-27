@@ -16,7 +16,6 @@
  *
  *             Begin implementation of logging
  *
- *
  * @author D062271
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  */
