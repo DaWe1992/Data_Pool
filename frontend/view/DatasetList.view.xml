@@ -54,7 +54,7 @@ Update/Change-Log:
 											class="underline"/>
 										<Text
 											text="|"
-											class="sapUiTinyMarginBegin sapUiTinyMarginEnd"/>
+											class="sapUiTinyMarginBegin sapUiTinyMarginEnd admin"/>
 										<Link
 											text="{i18n>Datasetlist.delete}"
 											press="onDeleteDataset"
@@ -62,9 +62,9 @@ Update/Change-Log:
 											class="underline admin"/>
 										<Text
 											text="|"
-											class="sapUiTinyMarginBegin sapUiTinyMarginEnd"/>
+											class="sapUiTinyMarginBegin sapUiTinyMarginEnd admin"/>
 										<Link
-											text="{i18n>Datasetlist.alter}"
+											text="{i18n>Datasetlist.update.description}"
 											press="onOpenAlterDescriptionDialog"
 											app:file_id="{file_id}"
 											class="underline admin"/>

@@ -10,13 +10,13 @@ Update/Change-Log:
     xmlns="sap.m" xmlns:l="sap.ui.layout"
     xmlns:core="sap.ui.core">
 	
-	<Dialog title="{i18n>Datasetlist.alter}">
+	<Dialog title="{i18n>Datasetlist.update.description}">
 		<content>
 				<l:VerticalLayout
 					width="100%"
 					class="sapUiContentPadding">
 					<l:HorizontalLayout>
-						<Text text="Updated description:"/>
+						<Text text="{i18n>Datasetlist.textarea.label}:"/>
 						<Text id="datasetId" class="hidden"/>
 					</l:HorizontalLayout>
 					<TextArea

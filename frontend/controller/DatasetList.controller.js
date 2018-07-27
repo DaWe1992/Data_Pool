@@ -5,6 +5,8 @@
  * Update/Change-Log:
  * 27.07.2018: Added handler functions for "AlterDescriptionDialog"
  *
+ *             Hide links that must not be used by non-admin users
+ *
  * @author D062271
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  */
@@ -28,6 +30,13 @@ sap.ui.define([
 		 */
 		onInit: function() {
 			self = this;
+			
+			// hide links that must not be used by non-admins
+			setTimeout(function() {
+				new AdminService().isAdmin(function() {}, function() {
+					$(".admin").css("visibility", "hidden");
+				});
+			}, 500);
 			
 			var oView = this.getView();
 			
