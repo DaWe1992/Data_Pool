@@ -75,7 +75,7 @@ sap.ui.define([
 				
 				// upload file
 				// @see https://archive.sap.com/discussions/thread/3505017
-				oFileUploader.setUploadUrl("/dataset" + "?file_name=" + sFileName);
+				oFileUploader.setUploadUrl("/dataset/" + sFileName);
 				oFileUploader.upload();
 			});
 		},

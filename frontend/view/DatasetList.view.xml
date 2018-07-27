@@ -38,8 +38,11 @@ Update/Change-Log:
 									class="sapUiSmallMarginBegin sapUiSmallMarginTopBottom"/>
 								<VBox class="sapUiSmallMarginBegin sapUiSmallMarginTopBottom">
 									<Label
-										text="{file_name}"
+										text="{file_name_short}"
 										class="bold"/>
+									<Label
+										text="Uploaded: {file_date}"
+										class="italic"/>
 									<Label
 										text="Size: {file_size_mb} MB"
 										class="italic"/>

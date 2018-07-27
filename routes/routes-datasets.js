@@ -5,6 +5,9 @@
  * Update/Change-Log:
  * 26.07.2018: Altered "/datasets" route such that it also returns file sizes
  *             Also fixed naming of downloaded file (was dataset.zip per default)
+ * 27.07.2018: Added renaming of file in "/dataset" (now "/dataset/:file_name?") route
+ *             Modified response of "/datasets" route. Route also returns the date
+ *             when the content was uploaded and the short file name
  *
  * @author D062271
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -41,6 +44,7 @@ module.exports = function(oApp) {
 
 			postgres.query(sSql, function(oErr, oResult) {
 				if(oErr) {return oRes.status(500).json({"err": oErr});}
+				var regex = /^AOA_(.*?)_(.*)$/;
 				
 				// read file size from file system
 				for(var i = 0; i < oResult.rows.length; i++) {
@@ -50,7 +54,24 @@ module.exports = function(oApp) {
 					var dFileSizeInBytes = oStats.size
 					// convert file size to megabytes
 					oResult.rows[i].file_size_mb = dFileSizeInBytes / 1000000.0
-				}
+					
+					// extract date and short file name from long file name
+					var aMatch = regex.exec(oResult.rows[i].file_name);
+					var oDate = new Date(parseInt(aMatch[1]));
+					
+					// extract date components
+					var sDay = ("0" + oDate.getDate()).substr(-2);
+					var sMonth = ("0" + (oDate.getMonth() + 1)).substr(-2);
+					var sYear = oDate.getFullYear();
+					var sHours = ("0" + oDate.getHours()).substr(-2);
+					var sMinutes = ("0" + oDate.getMinutes()).substr(-2);
+					var sSeconds = ("0" + oDate.getSeconds()).substr(-2);
+					
+					oResult.rows[i].file_date = sDay + "/" + sMonth + "/" + sYear +
+					" " + sHours + ":" + sMinutes + ":" + sSeconds;
+					
+					oResult.rows[i].file_name_short = aMatch[2];
+				}	
 
 				return oRes.status(200).json({
 					"data": oResult.rows
@@ -85,11 +106,13 @@ module.exports = function(oApp) {
 	 * Posts a new dataset to the server.
 	 *
 	 * @name /dataset
+	 * @param file_name (optional)
 	 */
-	oApp.post("/dataset", isAuthenticatedAdmin, function(oReq, oRes) {
+	oApp.post("/dataset/:file_name?", isAuthenticatedAdmin, function(oReq, oRes) {
 		oReq.pipe(oReq.busboy);
 	
 		oReq.busboy.on("file", function(sFieldname, oFile, sFileName) {
+			sFileName = oReq.params.file_name ? oReq.params.file_name : sFileName;
 			// if a new file arrives => create write stream
 			var oWriteStream = fs.createWriteStream(
 				path.join(config.app.dataset_root_path, sFileName)
