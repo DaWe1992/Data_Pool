@@ -30,3 +30,7 @@
 .logoutListItem {
 	background-color: #FFAFAF !important;
 }
+
+.hidden {
+	visibility: hidden !important;
+}

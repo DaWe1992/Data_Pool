@@ -35,10 +35,10 @@ sap.ui.define([
 		 */
 		handleUploadComplete: function(oEvent) {
 			// TODO: error handling
-			var oView = this.getView();
+			var oView = self.getView();
 			
 			MessageToast.show(
-				this.getTextById("Upload.upload.complete")
+				self.getTextById("Upload.upload.complete")
 			);
 			
 			oView.byId("fileUploader").setValue("");
@@ -51,7 +51,7 @@ sap.ui.define([
 		 * @param oEvent
 		 */
 		handleUploadPress: function(oEvent) {
-			this._isAdmin(function(res) {
+			self._isAdmin(function(res) {
 				// this is only executed if user is authorized
 				var oView = self.getView();
 				var oFileUploader = oView.byId("fileUploader");
@@ -73,8 +73,7 @@ sap.ui.define([
 				new DatasetService().addDescription(sFileName, sDescription,
 				function() {}, function() {});
 				
-				// upload file
-				// @see https://archive.sap.com/discussions/thread/3505017
+				// upload file (including renaming)
 				oFileUploader.setUploadUrl("/dataset/" + sFileName);
 				oFileUploader.upload();
 			});
@@ -87,7 +86,7 @@ sap.ui.define([
 		 */
 		handleTypeMissmatch: function(oEvent) {
 			MessageToast.show(
-				this.getTextById("Upload.error.no.zip.selected")
+				self.getTextById("Upload.error.no.zip.selected")
 			);
 		},
 		

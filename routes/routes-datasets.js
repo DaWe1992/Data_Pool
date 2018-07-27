@@ -4,10 +4,16 @@
  *
  * Update/Change-Log:
  * 26.07.2018: Altered "/datasets" route such that it also returns file sizes
+ *
  *             Also fixed naming of downloaded file (was dataset.zip per default)
+ *
  * 27.07.2018: Added renaming of file in "/dataset" (now "/dataset/:file_name?") route
+ *
  *             Modified response of "/datasets" route. Route also returns the date
- *             when the content was uploaded and the short file name
+ *             when the content was uploaded and the short file name (without prefix)
+ *
+ *             Added routes to update the description of a data set
+ *
  *
  * @author D062271
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -40,7 +46,7 @@ module.exports = function(oApp) {
     oApp.get("/datasets", isAuthenticated, function(oReq, oRes) {
 		fs.readdir(config.app.dataset_root_path, function(oErr, aFiles) {
 			
-			var sSql = "SELECT * FROM datasets;";
+			var sSql = "SELECT * FROM datasets ORDER BY file_id;";
 
 			postgres.query(sSql, function(oErr, oResult) {
 				if(oErr) {return oRes.status(500).json({"err": oErr});}
@@ -57,21 +63,10 @@ module.exports = function(oApp) {
 					
 					// extract date and short file name from long file name
 					var aMatch = regex.exec(oResult.rows[i].file_name);
-					var oDate = new Date(parseInt(aMatch[1]));
 					
-					// extract date components
-					var sDay = ("0" + oDate.getDate()).substr(-2);
-					var sMonth = ("0" + (oDate.getMonth() + 1)).substr(-2);
-					var sYear = oDate.getFullYear();
-					var sHours = ("0" + oDate.getHours()).substr(-2);
-					var sMinutes = ("0" + oDate.getMinutes()).substr(-2);
-					var sSeconds = ("0" + oDate.getSeconds()).substr(-2);
-					
-					oResult.rows[i].file_date = sDay + "/" + sMonth + "/" + sYear +
-					" " + sHours + ":" + sMinutes + ":" + sSeconds;
-					
+					oResult.rows[i].file_date = formatTimestamp(new Date(parseInt(aMatch[1])));
 					oResult.rows[i].file_name_short = aMatch[2];
-				}	
+				}
 
 				return oRes.status(200).json({
 					"data": oResult.rows
@@ -106,7 +101,7 @@ module.exports = function(oApp) {
 	 * Posts a new dataset to the server.
 	 *
 	 * @name /dataset
-	 * @param file_name (optional)
+	 * @param file_name (optional, used for renaming the file on the server)
 	 */
 	oApp.post("/dataset/:file_name?", isAuthenticatedAdmin, function(oReq, oRes) {
 		oReq.pipe(oReq.busboy);
@@ -148,12 +143,52 @@ module.exports = function(oApp) {
 	});
 	
 	/**
+	 * Gets the description for the dataset specified.
+	 *
+	 * @name /datasets/:file_id/description
+	 * @param file_id (obligatory)
+	 */
+	oApp.get("/datasets/:file_id/description", isAuthenticated, function(oReq, oRes) {
+		var sId = oReq.params.file_id;
+		
+		var sSql = "SELECT file_description FROM datasets WHERE file_id = '" + sId + "';";
+		
+		postgres.query(sSql, function(oErr, oResult) {
+			if(oErr) {return oRes.status(500).json({"err": oErr});}
+			return oRes.status(200).json({
+				"data": oResult.rows
+			});
+		});
+	});
+	
+	/**
+	 * Updates the description of a data set.
+	 *
+	 * @name /datasets/:file_id/description
+	 * @param file_id (obligatory)
+	 */
+	oApp.put("/datasets/:file_id/description", isAuthenticatedAdmin, function(oReq, oRes) {
+		var sId = oReq.params.file_id;
+		var sDescription = oReq.body.file_description;
+		
+		var sSql = "UPDATE datasets SET file_description = " +
+		sqlstring.escape(sDescription) + " WHERE file_id = '" + sId + "';";
+		
+		postgres.query(sSql, function(oErr, oResult) {
+			if(oErr) {return oRes.status(500).json({"err": oErr});}
+			return oRes.status(200).json({
+				"status": "ok"
+			});
+		});
+	});
+	
+	/**
 	 * Deletes a dataset from the server.
 	 *
 	 * @name /dataset/:file_id
 	 * @param file_id (obligatory)
 	 */
-	oApp.delete("/dataset/:file_id", isAuthenticatedAdmin, function(oReq, oRes) {
+	oApp.delete("/datasets/:file_id", isAuthenticatedAdmin, function(oReq, oRes) {
 		var sId = oReq.params.file_id;
 		
 		// get file name of file with id specified
@@ -191,3 +226,22 @@ module.exports = function(oApp) {
 		});
 	});
 };
+
+/**
+ * Converts a time stamp into a readable format.
+ *
+ * @param oDate (timestamp)
+ * @return Readable date
+ */
+function formatTimestamp(oDate) {
+	// extract date components
+	var sDay = ("0" + oDate.getDate()).substr(-2);
+	var sMonth = ("0" + (oDate.getMonth() + 1)).substr(-2);
+	var sYear = oDate.getFullYear();
+	var sHours = ("0" + oDate.getHours()).substr(-2);
+	var sMinutes = ("0" + oDate.getMinutes()).substr(-2);
+	var sSeconds = ("0" + oDate.getSeconds()).substr(-2);
+	
+	return sDay + "/" + sMonth + "/" + sYear +
+	" " + sHours + ":" + sMinutes + ":" + sSeconds;
+}

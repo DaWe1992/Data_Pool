@@ -1,6 +1,9 @@
 /**
  * DatasetListController.
- * 23.04.2018
+ * 23.04.201
+ *
+ * Update/Change-Log:
+ * 27.07.2018: Added handler functions for "AlterDescriptionDialog"
  *
  * @author D062271
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -11,8 +14,9 @@ sap.ui.define([
 	"com/sap/ml/data/pool/service/AdminService",
 	"sap/ui/model/json/JSONModel",
 	"sap/ui/model/Filter",
-	"sap/m/MessageBox"
-], function(BaseController, DatasetService, AdminService, JSONModel, Filter, MessageBox) {
+	"sap/m/MessageBox",
+	"sap/m/MessageToast"
+], function(BaseController, DatasetService, AdminService, JSONModel, Filter, MessageBox, MessageToast) {
 	"use strict";
 	
 	var self;
@@ -27,13 +31,13 @@ sap.ui.define([
 			
 			var oView = this.getView();
 			
-			this._getDatasets(function(data) {
+			this._getDatasets(function(aData) {
 				// set model
-				oView.setModel(new JSONModel(data));
+				oView.setModel(new JSONModel(aData));
 				
 				var oLabel = oView.byId("toolbarLabel");
 				oLabel.setText(
-					self.getTextById("Datasetlist.toolbar.text") + " " + data.length
+					self.getTextById("Datasetlist.toolbar.text") + " " + aData.length
 				);
 			});
 		},
@@ -55,15 +59,15 @@ sap.ui.define([
 			}
 
 			// update list binding
-			var oList = this.byId("datasetList");
+			var oList = self.byId("datasetList");
 			var oBinding = oList.getBinding("items");
 			oBinding.filter(aFilters, "Application");
 			
 			// update toolbar label
-			var oView = this.getView();
+			var oView = self.getView();
 			var oLabel = oView.byId("toolbarLabel");
 			oLabel.setText(
-				this.getTextById("Datasetlist.toolbar.text") + " " + oBinding.aIndices.length
+				self.getTextById("Datasetlist.toolbar.text") + " " + oBinding.aIndices.length
 			);
 		},
 		
@@ -116,6 +120,71 @@ sap.ui.define([
 		},
 		
 		/**
+		 * Opens a popup to alter the description of a data set.
+		 *
+		 * @param oEvent
+		 */
+		onOpenAlterDescriptionDialog: function(oEvent) {
+			var sId = oEvent.getSource().data("file_id");
+			
+			// check if user has admin permissions
+			new AdminService().isAdmin(function() {
+				// has permission...
+				self._openDialog(
+					"AlterDescriptionDialog",
+					"com.sap.ml.data.pool.fragment.AlterDescriptionDialog"
+				);
+				
+				self._getDescription(sId, function(aData) {
+					var oView = self.getView();
+					var oTextArea = oView.byId("descriptionTextArea");
+					var oTextDataSetId = oView.byId("datasetId");
+					
+					oTextArea.setValue(aData[0].file_description);
+					oTextDataSetId.setText(sId);
+					
+				});
+			}, function() {
+				// doesn't have permission...
+				MessageBox.error(self.getTextById("Misc.error.no.admin"));
+			});
+		},
+		
+		/**
+		 * Updates the description.
+		 *
+		 * @param oEvent
+		 */
+		onUpdateDescriptionPress: function(oEvent) {
+			var oView = self.getView();
+			
+			new DatasetService().updateDescription(
+				oView.byId("datasetId").getText(),
+				oView.byId("descriptionTextArea").getValue(),
+				function(res) {
+					self._oAlterDescriptionDialog.close();
+					MessageToast.show(
+						self.getTextById("Datasetlist.changed.description")
+					);
+				},
+				function(res) {
+					MessageToast.show(
+						self.getTextById("Misc.error")
+					);
+				}
+			);
+		},
+		
+		/**
+		 * Closes the "AlterDescriptionDialog".
+		 *
+		 * @param oEvent
+		 */
+		onAlterDescriptionDialogCancel: function(oEvent) {
+			self._oAlterDescriptionDialog.close();
+		},
+		
+		/**
          * Gets the list of datasets.
          *
          * @param fCallback
@@ -124,9 +193,24 @@ sap.ui.define([
             new DatasetService().getDatasets(function(res) {
                 fCallback(res.data);
             }, function(res) {
-                MessageBox.error(this.getTextById("Misc.error.data.load"));
+                MessageBox.error(self.getTextById("Misc.error.data.load"));
             });
         },
+		
+		/**
+		 * Gets the description of the data set.
+		 *
+		 * @param sId (id of the data set to load description for)
+		 * @param fCallback
+		 */
+		_getDescription: function(sId, fCallback) {
+			new DatasetService().getDescription(sId,
+			function(res) {
+				fCallback(res.data);
+			}, function(res) {
+				MessageBox.error(self.getTextById("Misc.error.data.load"));
+			});
+		},
 		
 		/**
 		 * Deletes the dataset.
@@ -140,6 +224,44 @@ sap.ui.define([
 				function() {},
 				function() {}
 			);	
-		}
+		},
+		
+		/**
+         * Opens the dialog specified
+         *
+         * @param sDialogType
+         * @param sDialogName
+         */
+        _openDialog: function(sDialogType, sDialogName) {
+            var oView = self.getView();
+
+            var oDialog = (sDialogType === "AlterDescriptionDialog")
+                ? self._oAlterDescriptionDialog
+                : undefined;
+
+            // create dialog lazily
+            if(!oDialog) {
+                // create dialog via fragment factory
+                oDialog = sap.ui.xmlfragment(
+                    oView.getId(),
+                    sDialogName,
+                    self
+                );
+
+                // connect dialog to the root view of this component
+                oView.addDependent(oDialog);
+
+                // forward compact/cozy style into dialog
+                jQuery.sap.syncStyleClass(
+                    oView.getController().getOwnerComponent().getContentDensityClass(), oView, oDialog
+                );
+            }
+
+            if(sDialogType === "AlterDescriptionDialog") {
+				self._oAlterDescriptionDialog = oDialog;	
+            } else {undefined;}
+
+            oDialog.open();
+        }
 	});
 });

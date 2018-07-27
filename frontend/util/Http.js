@@ -2,6 +2,9 @@
  * Http.
  * 27.04.2018
  *
+ * Update/Change-Log:
+ * 27.07.2018: Added PUT handler
+ *
  * @author D062271
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  */
@@ -50,6 +53,29 @@ sap.ui.define([
             $.ajax({
                 url: sReqUrl,
                 method: "POST",
+                data: oData,
+                statusCode: {
+                    200: function(res) {fSuccess(res)},
+                    201: function(res) {fSuccess(res)},
+                    400: function(res) {fError(res)},
+					403: function(res) {fError(res)},
+                    500: function(res) {fError(res)}
+                }
+            });
+        },
+		
+		/**
+         * Performs a AJAX PUT request.
+         *
+         * @param sReqUrl (REST endpoint)
+         * @param oData (data to be posted)
+         * @param fSuccess (callback in case of success)
+         * @param fError (callback in case of error)
+         */
+        performPut: function(sReqUrl, oData, fSuccess, fError) {
+            $.ajax({
+                url: sReqUrl,
+                method: "PUT",
                 data: oData,
                 statusCode: {
                     200: function(res) {fSuccess(res)},

@@ -2,6 +2,11 @@
  * DatasetService.
  * 27.04.2018
  *
+ * Update/Change-Log:
+ * 27.07.2018: Added "getDescription" function
+ *
+ *             Added "updateDescription" function
+ *
  * @author D062271
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  */
@@ -46,6 +51,31 @@ sap.ui.define([
 		},
 		
 		/**
+		 * Gets the description of the data set specified.
+		 *
+		 * @param sFileId (id of the file to load description for)
+		 * @param fSuccess (callback in case of success)
+		 * @param fError (callback in case of error)
+		 */
+		getDescription: function(sFileId, fSuccess, fError) {
+			this._http.performGet("/datasets/" + sFileId + "/description", fSuccess, fError);
+		},
+		
+		/**
+		 * Updates the file description of the data set specified.
+		 *
+		 * @param sFileId (id of the file to upload the description for)
+		 * @param sDescription (new description text)
+		 * @param fSuccess (callback in case of success)
+		 * @param fError (callback in case of error)
+		 */
+		updateDescription: function(sFileId, sDescription, fSuccess, fError) {
+			this._http.performPut("/datasets/" + sFileId + "/description", {
+				"file_description" : sDescription
+			}, fSuccess, fError);
+		},
+		
+		/**
 		 * Deletes the dataset specified.
 		 *
 		 * @param sId (id of dataset to be deleted)
@@ -53,7 +83,7 @@ sap.ui.define([
 		 * @param fError (callback in case of error)
 		 */
 		deleteDataset: function(sId, fSuccess, fError) {
-			this._http.performDelete("/dataset/" + sId, fSuccess, fError);
+			this._http.performDelete("/datasets/" + sId, fSuccess, fError);
 		}
     });
 });

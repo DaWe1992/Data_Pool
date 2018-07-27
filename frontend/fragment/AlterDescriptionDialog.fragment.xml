@@ -1,0 +1,40 @@
+<!--
+Fragment AlterDescriptionDialog.
+27.07.2018
+
+Update/Change-Log:
+
+@author D062271
+-->
+<core:FragmentDefinition
+    xmlns="sap.m" xmlns:l="sap.ui.layout"
+    xmlns:core="sap.ui.core">
+	
+	<Dialog title="{i18n>Datasetlist.alter}">
+		<content>
+				<l:VerticalLayout
+					width="100%"
+					class="sapUiContentPadding">
+					<l:HorizontalLayout>
+						<Text text="Updated description:"/>
+						<Text id="datasetId" class="hidden"/>
+					</l:HorizontalLayout>
+					<TextArea
+						id="descriptionTextArea"
+						rows="10"
+						width="100%"/>
+				</l:VerticalLayout>
+		</content>
+		<beginButton>
+			<Button
+				text="{i18n>Datasetlist.update.description}"
+				press="onUpdateDescriptionPress"/>
+		</beginButton>
+		<endButton>
+            <Button
+				text="{i18n>Misc.cancel}"
+				type="Reject"
+				press="onAlterDescriptionDialogCancel"/>
+        </endButton>
+	</Dialog>	
+</core:FragmentDefinition>
