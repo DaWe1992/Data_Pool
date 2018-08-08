@@ -37,9 +37,9 @@ sap.ui.define([
 					$(".admin").css("visibility", "hidden");
 				});
 				
-				MessageBox.information(
-					self.getTextById("Datasetlist.download.information")
-				);
+				//MessageBox.information(
+				//	self.getTextById("Datasetlist.download.information")
+				//);
 			}, 500);
 			
 			this._getDatasets(function(aData) {
