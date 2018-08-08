@@ -3,7 +3,7 @@
  * 23.04.2018
  *
  * Update/Change-Log:
- * -- 
+ * 08.08.2018: Added logs page navigation
  *
  * @author D062271
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -30,6 +30,10 @@ sap.ui.define([
 				// hide upload section if user is no admin
 				var oListItemUpload = self.getView().byId("itemNavUpload");
 				oListItemUpload.setVisible(false);
+				
+				// hide logs section if user is no admin
+				var oListItemLogs = self.getView().byId("itemNavLogs");
+				oListItemLogs.setVisible(false);
 			});
         },
 		
@@ -47,6 +51,10 @@ sap.ui.define([
 		
 		onPressGoToUpload: function(oEvent) {
 			this.getRouter().navTo("upload");
+		},
+		
+		onPressGoToLogs: function(oEvent) {
+			this.getRouter().navTo("logs");
 		},
 		
 		onPressLogout: function(oEvent) {

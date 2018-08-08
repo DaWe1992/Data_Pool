@@ -3,6 +3,7 @@ View App.
 27.04.2018
 
 Update/Change-Log:
+08.08.2018: Added logs page
 
 @author D062271
 -->
@@ -39,6 +40,12 @@ Update/Change-Log:
 								icon="sap-icon://upload"
 								type="Navigation"
 								press="onPressGoToUpload"/>
+							<StandardListItem
+								id="itemNavLogs"
+								title="{i18n>Nav.logs}"
+								icon="sap-icon://contacts"
+								type="Navigation"
+								press="onPressGoToLogs"/>
 							<ActionListItem
 								id="itemNavLogout"
 								text="{i18n>Nav.logout}"

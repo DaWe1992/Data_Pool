@@ -31,16 +31,20 @@ sap.ui.define([
 		onInit: function() {
 			self = this;
 			
-			// hide links that must not be used by non-admins
 			setTimeout(function() {
 				new AdminService().isAdmin(function() {}, function() {
+					// hide links that must not be used by non-admins
 					$(".admin").css("visibility", "hidden");
 				});
+				
+				MessageBox.information(
+					self.getTextById("Datasetlist.download.information")
+				);
 			}, 500);
 			
-			var oView = this.getView();
-			
 			this._getDatasets(function(aData) {
+				var oView = self.getView();
+				
 				// set model
 				oView.setModel(new JSONModel(aData));
 				

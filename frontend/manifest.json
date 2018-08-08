@@ -71,6 +71,11 @@
 					"pattern": "upload",
 					"name": "upload",
 					"target": "upload"
+				},
+				{
+					"pattern": "logs",
+					"name": "logs",
+					"target": "logs"
 				}
 			],
 			 "targets": {
@@ -84,6 +89,10 @@
 				},
 				"upload": {
 				   "viewName": "Upload",
+				   "viewLevel": 1
+				},
+				"logs": {
+				   "viewName": "Logs",
 				   "viewLevel": 1
 				},
 				"notFound": {

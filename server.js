@@ -2,6 +2,9 @@
  * Server setup.
  * 27.04.2018
  *
+ * Update/Change-Log:
+ * -- 
+ *
  * @author D062271
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  */
@@ -70,6 +73,7 @@ oApp.use(flash());
 // include routes
 require("./routes/routes-datasets.js")(oApp);
 require("./routes/routes-admin.js")(oApp);
+require("./routes/routes-logs.js")(oApp);
 require("./routes/routes-authentication.js")(oApp, passport);
 
 // serve favicon

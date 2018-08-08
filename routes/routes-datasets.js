@@ -16,6 +16,8 @@
  *
  *             Begin implementation of logging
  *
+ * 28.08.2018: Implementation of logging
+ *
  * @author D062271
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  */
@@ -88,14 +90,28 @@ module.exports = function(oApp) {
 		// statistics about file
 		var oStat = fs.statSync(sPath);
 		
-		oRes.writeHead(200, {
-			"Content-Type": "application/zip", // it is a *.zip file
-			"Content-Length": oStat.size,
-			"Content-disposition": "attachment; filename=" + sFileName
-		});
+		// file_name is also unique
+		var sSql = "SELECT file_id FROM datasets WHERE file_name = " +
+		sqlstring.escape(sFileName) + ";";
 		
-		// pipe result into response
-		fs.createReadStream(sPath).pipe(oRes);
+		postgres.query(sSql, function(oErr, oResult) {
+			if(oErr) {return oRes.status(500).json({"err": oErr});}
+			
+			// log download
+			logDownload(oResult.rows[0].file_id, oReq.user.username,
+			function(oErr, oResult) {
+				if(oErr) {return oRes.status(500).json({"err": oErr});}
+				
+				oRes.writeHead(200, {
+					"Content-Type": "application/zip", // it is a *.zip file
+					"Content-Length": oStat.size,
+					"Content-disposition": "attachment; filename=" + sFileName
+				});
+		
+				// pipe result into response
+				fs.createReadStream(sPath).pipe(oRes);
+			});
+		});
 	}),
 	
 	/**
@@ -248,10 +264,17 @@ function formatTimestamp(oDate) {
 }
 
 /**
+ * Logs the downloads of data sets.
  *
- *
- *
+ * @param iFileId (file which was downloaded)
+ * @param sUser (user who downloaded the data set)
+ * @param fCallback (callback function)
  */
-function logDownload(oUser) {
+function logDownload(iFileId, sUser, fCallback) {
+	var sSql = "INSERT INTO logs (file_id, log_user, log_time) " +
+	"VALUES (" + sqlstring.escape(iFileId) + ", " + sqlstring.escape(sUser) + ", current_timestamp);";
 	
+	postgres.query(sSql, function(oErr, oResult) {
+		fCallback(oErr, oResult);
+	});
 }

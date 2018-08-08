@@ -1,0 +1,49 @@
+<!--
+View Logs.
+08.08.2018
+
+Update/Change-Log:
+
+@author D062271
+-->
+<core:View
+	controllerName="com.sap.ml.data.pool.controller.Logs"
+	xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:t="sap.ui.table"
+	height="100%">
+	
+	<Page title="{i18n>Logs.page.header}">
+		<content>
+			<t:Table
+				rows="{/}"
+				selectionMode="MultiToggle"
+				visibleRowCount="30">
+				<t:columns>
+					<t:Column width="5rem">
+						<Label text="{i18n>Logs.table.column.id}"/>
+						<t:template>
+							<Text text="{log_id}" wrapping="false"/>
+						</t:template>
+					</t:Column>
+					<t:Column width="7.5rem">
+						<Label text="{i18n>Logs.table.column.user}"/>
+						<t:template>
+							<Text text="{log_user}" wrapping="false"/>
+						</t:template>
+					</t:Column>
+					<t:Column>
+						<Label text="{i18n>Logs.table.column.filename}"/>
+						<t:template>
+							<Text text="{file_name}" wrapping="false"/>
+						</t:template>
+					</t:Column>
+					<t:Column>
+						<Label text="{i18n>Logs.table.column.time}"/>
+						<t:template>
+							<Text text="{log_time}" wrapping="false"/>
+						</t:template>
+					</t:Column>
+				</t:columns>
+			</t:Table>
+		</content>
+	</Page>
+</core:View>
