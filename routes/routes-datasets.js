@@ -18,6 +18,12 @@
  *
  * 28.08.2018: Implementation of logging
  *
+ * 09.08.2018: Escaping of "'" in data set description
+ *
+ *			   Changed logging (due to foreign key constraint removal). In download route '/datasets/:file_name'
+ *             it is no longer necessary to select the id of the file which was downloaded for logging purposes.
+ *             Instead the file name is logged directly (no foreign key)
+ *
  * @author D062271
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  */
@@ -28,7 +34,7 @@
 var fs 					 = require("fs");
 var path				 = require("path");
 var rl 					 = require("readline");
-var sqlstring 			 = require("sqlstring");
+var esc		  	 		 = require("pg-escape");
 var busboy 				 = require("connect-busboy");
 
 // own modules
@@ -90,27 +96,19 @@ module.exports = function(oApp) {
 		// statistics about file
 		var oStat = fs.statSync(sPath);
 		
-		// file_name is also unique
-		var sSql = "SELECT file_id FROM datasets WHERE file_name = " +
-		sqlstring.escape(sFileName) + ";";
-		
-		postgres.query(sSql, function(oErr, oResult) {
+		// log download
+		logDownload(sFileName, oReq.user.username,
+		function(oErr, oResult) {
 			if(oErr) {return oRes.status(500).json({"err": oErr});}
-			
-			// log download
-			logDownload(oResult.rows[0].file_id, oReq.user.username,
-			function(oErr, oResult) {
-				if(oErr) {return oRes.status(500).json({"err": oErr});}
 				
-				oRes.writeHead(200, {
-					"Content-Type": "application/zip", // it is a *.zip file
-					"Content-Length": oStat.size,
-					"Content-disposition": "attachment; filename=" + sFileName
-				});
-		
-				// pipe result into response
-				fs.createReadStream(sPath).pipe(oRes);
+			oRes.writeHead(200, {
+				"Content-Type": "application/zip", // it is a *.zip file
+				"Content-Length": oStat.size,
+				"Content-disposition": "attachment; filename=" + sFileName
 			});
+		
+			// pipe result into response
+			fs.createReadStream(sPath).pipe(oRes);
 		});
 	}),
 	
@@ -147,8 +145,8 @@ module.exports = function(oApp) {
 		var sDescription = oReq.body.file_description;
 		
 		// insert new dataset into database
-		var sSql = "INSERT INTO datasets (file_name, file_description) VALUES (" +
-		sqlstring.escape(sFileName) + ", " + sqlstring.escape(sDescription) + ");";
+		var sSql = esc("INSERT INTO datasets (file_name, file_description) VALUES (%Q, %Q);",
+		sFileName, sDescription);
 		
 		postgres.query(sSql, function(oErr, oResult) {
 			if(oErr) {return oRes.status(500).json({"err": oErr});}
@@ -168,7 +166,7 @@ module.exports = function(oApp) {
 	oApp.get("/datasets/:file_id/description", isAuthenticated, function(oReq, oRes) {
 		var sId = oReq.params.file_id;
 		
-		var sSql = "SELECT file_description FROM datasets WHERE file_id = '" + sId + "';";
+		var sSql = esc("SELECT file_description FROM datasets WHERE file_id = %Q;", sId);
 		
 		postgres.query(sSql, function(oErr, oResult) {
 			if(oErr) {return oRes.status(500).json({"err": oErr});}
@@ -188,8 +186,8 @@ module.exports = function(oApp) {
 		var sId = oReq.params.file_id;
 		var sDescription = oReq.body.file_description;
 		
-		var sSql = "UPDATE datasets SET file_description = " +
-		sqlstring.escape(sDescription) + " WHERE file_id = '" + sId + "';";
+		var sSql = esc("UPDATE datasets SET file_description = %Q WHERE file_id = %Q;",
+		sDescription, sId);
 		
 		postgres.query(sSql, function(oErr, oResult) {
 			if(oErr) {return oRes.status(500).json({"err": oErr});}
@@ -209,15 +207,13 @@ module.exports = function(oApp) {
 		var sId = oReq.params.file_id;
 		
 		// get file name of file with id specified
-		var sSql = "SELECT file_name FROM datasets WHERE file_id = " +
-		sqlstring.escape(sId) + ";";
+		var sSql = esc("SELECT file_name FROM datasets WHERE file_id = %Q;", sId);
 		
 		postgres.query(sSql, function(oErr, oResult) {
 			if(oErr) {return oRes.status(500).json({"err": oErr});}
 			
 			var sFileName = oResult.rows[0].file_name;
-			var sSql = "DELETE FROM datasets WHERE file_id = " +
-			sqlstring.escape(sId) + ";";
+			var sSql = esc("DELETE FROM datasets WHERE file_id = %Q;", sId);
 			
 			// delete dataset entry from database
 			postgres.query(sSql, function(oErr, oResult) {
@@ -266,13 +262,13 @@ function formatTimestamp(oDate) {
 /**
  * Logs the downloads of data sets.
  *
- * @param iFileId (file which was downloaded)
+ * @param sFileName (name of the file which was downloaded)
  * @param sUser (user who downloaded the data set)
  * @param fCallback (callback function)
  */
-function logDownload(iFileId, sUser, fCallback) {
-	var sSql = "INSERT INTO logs (file_id, log_user, log_time) " +
-	"VALUES (" + sqlstring.escape(iFileId) + ", " + sqlstring.escape(sUser) + ", current_timestamp);";
+function logDownload(sFileName, sUser, fCallback) {
+	var sSql = esc("INSERT INTO logs (log_file, log_user, log_time) " +
+	"VALUES (%Q, %Q, localtimestamp);", sFileName, sUser);
 	
 	postgres.query(sSql, function(oErr, oResult) {
 		fCallback(oErr, oResult);

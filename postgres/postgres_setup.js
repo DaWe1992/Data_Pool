@@ -2,10 +2,12 @@
  * Postgres setup.
  * 11.05.2018
  *
- * @author D062271
- *
  * Update/Change-Log:
  * 08.08.2018: Added table definition for 'logs' table
+ *
+ * 09.08.2018: Removed foreign key constraint
+ *
+ * @author D062271
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  */
 
@@ -30,7 +32,7 @@ module.exports = function() {
 	postgres.query("" +
 		"CREATE TABLE IF NOT EXISTS logs (" +
 			"log_id SERIAL PRIMARY KEY, " +
-			"file_id INT REFERENCES datasets(file_id), " +
+			"log_file VARCHAR(100)," +
 			"log_user VARCHAR(20), " +
 			"log_time timestamp" +
 		");",

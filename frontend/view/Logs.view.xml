@@ -3,6 +3,7 @@ View Logs.
 08.08.2018
 
 Update/Change-Log:
+09.08.2018: Changed binding from 'file_name' to 'log_file'
 
 @author D062271
 -->
@@ -33,7 +34,7 @@ Update/Change-Log:
 					<t:Column>
 						<Label text="{i18n>Logs.table.column.filename}"/>
 						<t:template>
-							<Text text="{file_name}" wrapping="false"/>
+							<Text text="{log_file}" wrapping="false"/>
 						</t:template>
 					</t:Column>
 					<t:Column>
