@@ -24,6 +24,8 @@
  *             it is no longer necessary to select the id of the file which was downloaded for logging purposes.
  *             Instead the file name is logged directly (no foreign key)
  *
+ * 13.08.2018: Added title attribute for data sets
+ *
  * @author D062271
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  */
@@ -136,17 +138,18 @@ module.exports = function(oApp) {
 	});
 	
 	/**
-	 * Posts a new dataset description to the server.
+	 * Posts a new dataset description and title to the server.
 	 *
 	 * @name /addDescription
 	 */
 	oApp.post("/addDescription", isAuthenticatedAdmin, function(oReq, oRes) {
 		var sFileName = oReq.body.file_name;
-		var sDescription = oReq.body.file_description;
+		var sFileTitle = oReq.body.file_title;
+		var sDescription = oReq.body.file_description || "<No description>";
 		
 		// insert new dataset into database
-		var sSql = esc("INSERT INTO datasets (file_name, file_description) VALUES (%Q, %Q);",
-		sFileName, sDescription);
+		var sSql = esc("INSERT INTO datasets (file_name, file_title, file_description) VALUES (%Q, %Q, %Q);",
+		sFileName, sFileTitle, sDescription);
 		
 		postgres.query(sSql, function(oErr, oResult) {
 			if(oErr) {return oRes.status(500).json({"err": oErr});}
@@ -158,7 +161,7 @@ module.exports = function(oApp) {
 	});
 	
 	/**
-	 * Gets the description for the dataset specified.
+	 * Gets the description and the title for the dataset specified.
 	 *
 	 * @name /datasets/:file_id/description
 	 * @param file_id (obligatory)
@@ -166,7 +169,7 @@ module.exports = function(oApp) {
 	oApp.get("/datasets/:file_id/description", isAuthenticated, function(oReq, oRes) {
 		var sId = oReq.params.file_id;
 		
-		var sSql = esc("SELECT file_description FROM datasets WHERE file_id = %Q;", sId);
+		var sSql = esc("SELECT file_description, file_title FROM datasets WHERE file_id = %Q;", sId);
 		
 		postgres.query(sSql, function(oErr, oResult) {
 			if(oErr) {return oRes.status(500).json({"err": oErr});}
@@ -177,17 +180,18 @@ module.exports = function(oApp) {
 	});
 	
 	/**
-	 * Updates the description of a data set.
+	 * Updates the description and the title of a data set.
 	 *
 	 * @name /datasets/:file_id/description
 	 * @param file_id (obligatory)
 	 */
 	oApp.put("/datasets/:file_id/description", isAuthenticatedAdmin, function(oReq, oRes) {
 		var sId = oReq.params.file_id;
+		var sFileTitle = oReq.body.file_title;
 		var sDescription = oReq.body.file_description;
 		
-		var sSql = esc("UPDATE datasets SET file_description = %Q WHERE file_id = %Q;",
-		sDescription, sId);
+		var sSql = esc("UPDATE datasets SET file_description = %Q, file_title = %Q WHERE file_id = %Q;",
+		sDescription, sFileTitle, sId);
 		
 		postgres.query(sSql, function(oErr, oResult) {
 			if(oErr) {return oRes.status(500).json({"err": oErr});}

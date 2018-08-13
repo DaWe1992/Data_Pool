@@ -5,6 +5,7 @@ View DataSetList.
 Update/Change-Log:
 26.07.2018: Added label which displays file size
 27.07.2018: Added Link to change data set descriptions
+13.08.2018: Added 'file_title'
 
 @author D062271
 -->
@@ -39,7 +40,7 @@ Update/Change-Log:
 									class="sapUiSmallMarginBegin sapUiSmallMarginTopBottom"/>
 								<VBox class="sapUiSmallMarginBegin sapUiSmallMarginTopBottom">
 									<Label
-										text="{file_name_short}"
+										text="{file_title} ({file_name_short})"
 										class="bold"/>
 									<Label
 										text="Uploaded: {file_date}"

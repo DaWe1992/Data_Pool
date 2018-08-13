@@ -7,6 +7,8 @@
  *
  *             Added "updateDescription" function
  *
+ * 13.08.2018: Added title for the data set. Changed 'addDescription', 'updateDescription'
+ *
  * @author D062271
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  */
@@ -36,22 +38,24 @@ sap.ui.define([
         },
 		
 		/**
-		 * Posts the description of the dataset
+		 * Posts the description and the title of the dataset
 		 *
 		 * @param sFileName (name of the file)
+		 * @param sTitle (title of the dataset)
 		 * @param sDescription (description of the dataset)
 		 * @param fSuccess (callback in case of success)
          * @param fError (callback in case of error)
 		 */
-		addDescription: function(sFileName, sDescription, fSuccess, fError) {
+		addDescription: function(sFileName, sTitle, sDescription, fSuccess, fError) {
 			this._http.performPost("/addDescription", {
 				"file_name": sFileName,
+				"file_title": sTitle,
 				"file_description": sDescription
 			}, fSuccess, fError);
 		},
 		
 		/**
-		 * Gets the description of the data set specified.
+		 * Gets the description and the title of the data set specified.
 		 *
 		 * @param sFileId (id of the file to load description for)
 		 * @param fSuccess (callback in case of success)
@@ -62,16 +66,18 @@ sap.ui.define([
 		},
 		
 		/**
-		 * Updates the file description of the data set specified.
+		 * Updates the file description anf the file title of the data set specified.
 		 *
 		 * @param sFileId (id of the file to upload the description for)
+		 * @param sTitle (new title of the data set)
 		 * @param sDescription (new description text)
 		 * @param fSuccess (callback in case of success)
 		 * @param fError (callback in case of error)
 		 */
-		updateDescription: function(sFileId, sDescription, fSuccess, fError) {
+		updateDescription: function(sFileId, sTitle, sDescription, fSuccess, fError) {
 			this._http.performPut("/datasets/" + sFileId + "/description", {
-				"file_description" : sDescription
+				"file_title": sTitle,
+				"file_description": sDescription
 			}, fSuccess, fError);
 		},
 		

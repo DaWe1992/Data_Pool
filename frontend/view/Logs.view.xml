@@ -19,7 +19,7 @@ Update/Change-Log:
 				selectionMode="MultiToggle"
 				visibleRowCount="30">
 				<t:columns>
-					<t:Column width="5rem">
+					<t:Column width="4rem">
 						<Label text="{i18n>Logs.table.column.id}"/>
 						<t:template>
 							<Text text="{log_id}" wrapping="false"/>
@@ -37,7 +37,7 @@ Update/Change-Log:
 							<Text text="{log_file}" wrapping="false"/>
 						</t:template>
 					</t:Column>
-					<t:Column>
+					<t:Column width="15rem">
 						<Label text="{i18n>Logs.table.column.time}"/>
 						<t:template>
 							<Text text="{log_time}" wrapping="false"/>

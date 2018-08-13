@@ -3,6 +3,7 @@ View Upload.
 27.04.2018
 
 Update/Change-Log:
+13.08.2018: Added an input field for the title
 
 @author D062271
 -->
@@ -29,10 +30,14 @@ Update/Change-Log:
 					placeholder="{i18n>Upload.fileuploader.placeholder}"
 					width="100%">
 				</u:FileUploader>
+				<Input
+					id="titleInput"
+					placeholder="{i18n>Upload.titleinput.placeholder}"
+					width="100%"/>
 				<TextArea
 					id="descriptionTextArea"
 					rows="10"
-					placeholder="{i18n>Upload.textarea.placeholder}"
+					placeholder="{i18n>Upload.descriptiontextarea.placeholder}"
 					width="100%"/>
 				<Button
 					text="{i18n>Upload.button.text}"

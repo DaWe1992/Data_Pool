@@ -7,6 +7,8 @@
  *
  * 09.08.2018: Removed foreign key constraint
  *
+ * 13.08.2018: Added 'file_title' column in 'datasets' table
+ *
  * @author D062271
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  */
@@ -22,6 +24,7 @@ module.exports = function() {
     postgres.query("" +
 		"CREATE TABLE IF NOT EXISTS datasets (" +
 			"file_id SERIAL PRIMARY KEY, " +
+			"file_title VARCHAR(100) NOT NULL, " +
 			"file_name VARCHAR(100) NOT NULL UNIQUE, " +
 			"file_description TEXT" +
 		");",

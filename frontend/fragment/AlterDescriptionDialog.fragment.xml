@@ -12,18 +12,22 @@ Update/Change-Log:
 	
 	<Dialog title="{i18n>Datasetlist.update.description}">
 		<content>
-				<l:VerticalLayout
-					width="100%"
-					class="sapUiContentPadding">
-					<l:HorizontalLayout>
-						<Text text="{i18n>Datasetlist.textarea.label}:"/>
-						<Text id="datasetId" class="hidden"/>
-					</l:HorizontalLayout>
-					<TextArea
-						id="descriptionTextArea"
-						rows="10"
-						width="100%"/>
-				</l:VerticalLayout>
+			<l:VerticalLayout
+				width="100%"
+				class="sapUiContentPadding">
+				<l:HorizontalLayout>
+					<Text text="{i18n>Datasetlist.titleinput.label}:"/>
+					<Text id="datasetId" class="hidden"/>
+				</l:HorizontalLayout>
+				<Input
+					id="titleInput"
+					width="100%"/>
+				<Text text="{i18n>Datasetlist.descriptiontextarea.label}:"/>
+				<TextArea
+					id="descriptionTextArea"
+					rows="10"
+					width="100%"/>
+			</l:VerticalLayout>
 		</content>
 		<beginButton>
 			<Button

@@ -7,6 +7,8 @@
  *
  *             Hide links that must not be used by non-admin users
  *
+ * 13.08.2018: Added title for the dataset
+ *
  * @author D062271
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  */
@@ -150,11 +152,13 @@ sap.ui.define([
 				
 				self._getDescription(sId, function(aData) {
 					var oView = self.getView();
-					var oTextArea = oView.byId("descriptionTextArea");
 					var oTextDataSetId = oView.byId("datasetId");
+					var oInput = oView.byId("titleInput");
+					var oTextArea = oView.byId("descriptionTextArea");
 					
-					oTextArea.setValue(aData[0].file_description);
 					oTextDataSetId.setText(sId);
+					oInput.setValue(aData[0].file_title);
+					oTextArea.setValue(aData[0].file_description);
 					
 				});
 			}, function() {
@@ -173,6 +177,7 @@ sap.ui.define([
 			
 			new DatasetService().updateDescription(
 				oView.byId("datasetId").getText(),
+				oView.byId("titleInput").getValue(),
 				oView.byId("descriptionTextArea").getValue(),
 				function(res) {
 					self._oAlterDescriptionDialog.close();

@@ -7,6 +7,8 @@
  *
  * 27.07.2018: Added busy indicator while uploading
  *
+ * 13.08.2018: Added title for the data set
+ *
  * @author D062271
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  */
@@ -44,6 +46,7 @@ sap.ui.define([
 			);
 			
 			oView.byId("fileUploader").setValue("");
+			oView.byId("titleInput").setValue("");
 			oView.byId("descriptionTextArea").setValue("");
 			oView.byId("uploadPage").setBusy(false);
 		},
@@ -58,25 +61,31 @@ sap.ui.define([
 				// this is only executed if user is authorized
 				var oView = self.getView();
 				var oFileUploader = oView.byId("fileUploader");
+				var oInput = oView.byId("titleInput");
 				
-				var sFileName = "AOA_" + Date.now() + "_" + oFileUploader.getValue();
+				var sFileName = oFileUploader.getValue();
 				
 				// check if valid file was selected
-				if(!sFileName) {
+				if(!(sFileName && oInput.getValue())) {
 					MessageToast.show(
-						self.getTextById("Upload.error.no.file.selected")
+						self.getTextById("Upload.error.no.file.selected.no.title")
 					);
 					return;
 				}
+				
+				var sFileName = "AOA_" + Date.now() + "_" + sFileName;
 				
 				oView.byId("uploadPage").setBusy(true);
 				
 				// file was selected and user is authorized...
 				var oTextArea = oView.byId("descriptionTextArea");
-				var sDescription = oTextArea.getValue();
 				
-				new DatasetService().addDescription(sFileName, sDescription,
-				function() {}, function() {});
+				new DatasetService().addDescription(
+					sFileName,
+					oInput.getValue(),
+					oTextArea.getValue(),
+					function() {}, function() {}
+				);
 				
 				// upload file (including renaming)
 				oFileUploader.setUploadUrl("/dataset/" + sFileName);
