@@ -21,6 +21,11 @@ Update/Change-Log:
 				title="{i18n>Nav}"
 				icon="sap-icon://action"
 				class="sapUiStdPage">
+				<headerContent>
+					<Button
+						press="onPressLogout"
+						icon="sap-icon://log"/>
+				</headerContent>
 				<content>
 					<List>
 						<items>
@@ -46,10 +51,10 @@ Update/Change-Log:
 								icon="sap-icon://contacts"
 								type="Navigation"
 								press="onPressGoToLogs"/>
-							<ActionListItem
+							<!--<ActionListItem
 								id="itemNavLogout"
 								text="{i18n>Nav.logout}"
-								press="onPressLogout"/>
+								press="onPressLogout"/>-->
 						</items>
 					</List>
 				</content>

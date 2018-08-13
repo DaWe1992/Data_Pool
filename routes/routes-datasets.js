@@ -188,7 +188,7 @@ module.exports = function(oApp) {
 	oApp.put("/datasets/:file_id/description", isAuthenticatedAdmin, function(oReq, oRes) {
 		var sId = oReq.params.file_id;
 		var sFileTitle = oReq.body.file_title;
-		var sDescription = oReq.body.file_description;
+		var sDescription = oReq.body.file_description || "No description";
 		
 		var sSql = esc("UPDATE datasets SET file_description = %Q, file_title = %Q WHERE file_id = %Q;",
 		sDescription, sFileTitle, sId);

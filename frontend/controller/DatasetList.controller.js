@@ -216,14 +216,29 @@ sap.ui.define([
 				// add html tags for the description
 				for(var i = 0; i < aData.length; i++) {
 					aData[i].file_description = "" +
-					"<p style=\"" +
-						"white-space: pre-line;" +
-						"font-size: 10pt;" +
-						"font-style: italic;" +
-						"margin-top: 0px;" +
-					"\">" +
-					aData[i].file_description + "</p>";
+					"<html>" +
+						"<head>" +
+							"<style>" +
+								"ul {" +
+									"font-size: 10pt;" +
+								"}," +
+								"ol {" +
+									"font-size: 10pt;" +
+								"}," +
+								"p {" +
+									"white-space: pre-line;" +
+									"font-size: 10pt;" +
+									"font-style: italic;" +
+									"margin-top: 0px;" +
+								"}" +
+							"</style>" +
+						"</head>" +
+						"<body>" +
+							"<p>" + aData[i].file_description + "</p>" +
+						"</body>" +
+					"</html>";
 				}
+				
                 fCallback(res.data);
             }, function(res) {
                 MessageBox.error(self.getTextById("Misc.error.data.load"));
