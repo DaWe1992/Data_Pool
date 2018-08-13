@@ -221,10 +221,10 @@ sap.ui.define([
 							"<style>" +
 								"ul {" +
 									"font-size: 10pt;" +
-								"}," +
+								"}" +
 								"ol {" +
 									"font-size: 10pt;" +
-								"}," +
+								"}" +
 								"p {" +
 									"white-space: pre-line;" +
 									"font-size: 10pt;" +
