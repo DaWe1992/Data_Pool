@@ -6,6 +6,7 @@ Update/Change-Log:
 26.07.2018: Added label which displays file size
 27.07.2018: Added Link to change data set descriptions
 13.08.2018: Added 'file_title'
+			Added HTML tags for file descriptions
 
 @author D062271
 -->
@@ -72,9 +73,9 @@ Update/Change-Log:
 									</HBox>
 								</VBox>
 							</HBox>
-							<Text
-								text="{file_description}"
-								class="italic justify sapUiSmallMarginBegin"/>
+							<VBox class="sapUiSmallMarginBegin">
+								<core:HTML content="{file_description}"/>
+							</VBox>
 						</VBox>
 					</CustomListItem>
 				</items>

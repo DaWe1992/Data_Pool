@@ -145,7 +145,7 @@ module.exports = function(oApp) {
 	oApp.post("/addDescription", isAuthenticatedAdmin, function(oReq, oRes) {
 		var sFileName = oReq.body.file_name;
 		var sFileTitle = oReq.body.file_title;
-		var sDescription = oReq.body.file_description || "<No description>";
+		var sDescription = oReq.body.file_description || "No description";
 		
 		// insert new dataset into database
 		var sSql = esc("INSERT INTO datasets (file_name, file_title, file_description) VALUES (%Q, %Q, %Q);",

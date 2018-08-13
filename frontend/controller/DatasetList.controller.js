@@ -9,6 +9,8 @@
  *
  * 13.08.2018: Added title for the dataset
  *
+ *			   Added HTML tags for file description
+ *
  * @author D062271
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  */
@@ -209,6 +211,19 @@ sap.ui.define([
          */
         _getDatasets: function(fCallback) {
             new DatasetService().getDatasets(function(res) {
+				var aData = res.data;
+				
+				// add html tags for the description
+				for(var i = 0; i < aData.length; i++) {
+					aData[i].file_description = "" +
+					"<p style=\"" +
+						"white-space: pre-line;" +
+						"font-size: 10pt;" +
+						"font-style: italic;" +
+						"margin-top: 0px;" +
+					"\">" +
+					aData[i].file_description + "</p>";
+				}
                 fCallback(res.data);
             }, function(res) {
                 MessageBox.error(self.getTextById("Misc.error.data.load"));
