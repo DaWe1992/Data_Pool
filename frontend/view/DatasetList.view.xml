@@ -7,6 +7,7 @@ Update/Change-Log:
 27.07.2018: Added Link to change data set descriptions
 13.08.2018: Added 'file_title'
 			Added HTML tags for file descriptions
+17.08.2018: Set HTML attribute preferDOM="False" to prevent rendering it several times
 
 @author D062271
 -->
@@ -74,7 +75,10 @@ Update/Change-Log:
 								</VBox>
 							</HBox>
 							<VBox class="sapUiSmallMarginBegin">
-								<core:HTML content="{file_description}"/>
+								<core:HTML
+									content="{file_description}"
+									preferDOM="False"
+								/>
 							</VBox>
 						</VBox>
 					</CustomListItem>
