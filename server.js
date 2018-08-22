@@ -3,7 +3,7 @@
  * 27.04.2018
  *
  * Update/Change-Log:
- * -- 
+ * 22.08.2018: Included misc routes.
  *
  * @author D062271
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -75,6 +75,7 @@ require("./routes/routes-datasets.js")(oApp);
 require("./routes/routes-admin.js")(oApp);
 require("./routes/routes-logs.js")(oApp);
 require("./routes/routes-authentication.js")(oApp, passport);
+require("./routes/routes-misc.js")(oApp);
 
 // serve favicon
 oApp.use(favicon(path.join(__dirname, "frontend", "img", "favicon.ico")));
