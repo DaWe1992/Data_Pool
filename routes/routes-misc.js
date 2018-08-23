@@ -14,7 +14,6 @@
 // import necessary modules
 var fs				= require("fs");
 var path 			= require("path");
-var diskspace 		= require("diskspace");
 
 // own modules
 var config 			= require("../config.js");
