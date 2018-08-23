@@ -12,12 +12,12 @@
 "use strict";
 
 // import necessary modules
-var fs				= require("fs");
-var path 			= require("path");
+var fs				  	 = require("fs");
+var path 				 = require("path");
 
 // own modules
-var config 			= require("../config.js");
-var isAuthenticated = require("../passport/isAuthenticated.js");
+var config 				 = require("../config.js");
+var isAuthenticatedAdmin = require("../passport/isAuthenticatedAdmin.js");
 
 // ==============================================================
 
@@ -28,7 +28,7 @@ module.exports = function(oApp) {
      *
      * @name /diskusage
      */
-    oApp.get("/diskusage", isAuthenticated, function(oReq, oRes) {
+    oApp.get("/diskusage", isAuthenticatedAdmin, function(oReq, oRes) {
 		fs.readdir(config.app.dataset_root_path, function(oErr, aFileNames) {
 			if(oErr) {return oRes.status(500).json({"err": oErr});}
 		

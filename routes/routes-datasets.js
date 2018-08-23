@@ -61,7 +61,7 @@ module.exports = function(oApp) {
 
 			postgres.query(sSql, function(oErr, oResult) {
 				if(oErr) {return oRes.status(500).json({"err": oErr});}
-				var regex = /^AOA_(.*?)_(.*)$/;
+				var regex = /^AOA_(.*?)_(.*?)_(.*)$/;
 				
 				// read file size from file system
 				for(var i = 0; i < oResult.rows.length; i++) {
@@ -76,7 +76,8 @@ module.exports = function(oApp) {
 					var aMatch = regex.exec(oResult.rows[i].file_name);
 					
 					oResult.rows[i].file_date = formatTimestamp(new Date(parseInt(aMatch[1])));
-					oResult.rows[i].file_name_short = aMatch[2];
+					oResult.rows[i].file_version = aMatch[2];
+					oResult.rows[i].file_name_short = aMatch[3];
 				}
 
 				return oRes.status(200).json({

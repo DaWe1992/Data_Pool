@@ -4,6 +4,7 @@ View App.
 
 Update/Change-Log:
 08.08.2018: Added logs page
+23.08.2018: Added update page
 
 @author D062271
 -->
@@ -45,6 +46,12 @@ Update/Change-Log:
 								icon="sap-icon://upload"
 								type="Navigation"
 								press="onPressGoToUpload"/>
+							<StandardListItem
+								id="itemNavUpdate"
+								title="{i18n>Nav.update}"
+								icon="sap-icon://upload"
+								type="Navigation"
+								press="onPressGoToUpdate"/>
 							<StandardListItem
 								id="itemNavLogs"
 								title="{i18n>Nav.logs}"

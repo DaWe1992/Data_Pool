@@ -73,6 +73,11 @@
 					"target": "upload"
 				},
 				{
+					"pattern": "update",
+					"name": "update",
+					"target": "update"
+				},
+				{
 					"pattern": "logs",
 					"name": "logs",
 					"target": "logs"
@@ -89,6 +94,10 @@
 				},
 				"upload": {
 				   "viewName": "Upload",
+				   "viewLevel": 1
+				},
+				"update": {
+				   "viewName": "Update",
 				   "viewLevel": 1
 				},
 				"logs": {

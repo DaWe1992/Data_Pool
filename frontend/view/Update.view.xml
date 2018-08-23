@@ -1,0 +1,52 @@
+<!--
+View Update.
+23.08.2018
+
+Update/Change-Log:
+
+@author D062271
+-->
+<core:View
+	controllerName="com.sap.ml.data.pool.controller.Update"
+	xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:l="sap.ui.layout"
+	xmlns:u="sap.ui.unified"
+	height="100%">
+	
+	<Page
+		id="uploadPage"
+		title="{i18n>Update.page.header}"
+		class="sapUiResponsiveContentPadding">
+		<content>
+			<l:VerticalLayout width="100%">
+				<Text text="Select data set to update:"/>
+				<Select
+					forceSelection="true"
+					width="100%"
+					items="{
+						path: '/',
+						sorter: {path: 'file_id'}
+					}">
+					<core:Item key="{file_id}" text="{file_name}"/>
+				</Select>
+				<Text
+					text="Choose the new *.zip file:"
+					class="sapUiSmallMarginTop"/>
+				<u:FileUploader
+					id="fileUploader"
+					name="myFileUpload"
+					uploadUrl="/dataset"
+					uploadComplete="handleUploadComplete"
+					typeMissmatch="handleTypeMissmatch"
+					style="Emphasized"
+					fileType="zip"
+					placeholder="{i18n>Upload.fileuploader.placeholder}"
+					width="100%">
+				</u:FileUploader>
+				<Button
+					text="{i18n>Update.button.text}"
+					press="handleUpdatePress"
+					class="sapUiSmallMarginTop"/>
+			</l:VerticalLayout>
+		</content>
+	</Page>
+</core:View>

@@ -7,6 +7,8 @@
  *
  * 23.08.2018: Added disk usage
  *
+ *			   Added update page
+ *
  * @author D062271
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  */
@@ -29,10 +31,12 @@ sap.ui.define([
         onInit: function() {
             self = this;
 			
-			new AdminService().isAdmin(function() {},
+			new AdminService().isAdmin(
+			function() {},
 			function() {
 				// hide sections for non-admin users
 				self.getView().byId("itemNavUpload").setVisible(false);
+				self.getView().byId("itemNavUpdate").setVisible(false);
 				self.getView().byId("itemNavLogs").setVisible(false);
 				self.getView().byId("itemNavDiskUsage").setVisible(false);
 			});
@@ -43,25 +47,31 @@ sap.ui.define([
 		 */
 		 
 		onPressGoToHome: function(oEvent) {
-			this.getRouter().navTo("home");
+			self.getRouter().navTo("home");
 		},
 		
 		onPressGoToDatasets: function(oEvent) {
-			this.getRouter().navTo("datasets");
+			self.getRouter().navTo("datasets");
 		},
 		
 		onPressGoToUpload: function(oEvent) {
-			this.getRouter().navTo("upload");
+			self.getRouter().navTo("upload");
+		},
+		
+		onPressGoToUpdate: function(oEvent) {
+			self.getRouter().navTo("update");
 		},
 		
 		onPressGoToLogs: function(oEvent) {
-			this.getRouter().navTo("logs");
+			self.getRouter().navTo("logs");
 		},
 		
 		onPressDiskUsage: function(oEvent) {
 			self._getDiskUsage(function(data) {
-				MessageBox.information("Disk Usage: " + data.used_space_mb + " MB" +
-				"\nDisk Usage: " + data.used_space_percent + " %");
+				MessageBox.information(
+					self.getTextById("Misc.diskusage") + data.used_space_mb + " MB\n" +
+					self.getTextById("Misc.diskusage") + data.used_space_percent + " %"
+				);
 			});
 		},
 		

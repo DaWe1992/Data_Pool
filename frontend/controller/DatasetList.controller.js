@@ -40,13 +40,9 @@ sap.ui.define([
 					// hide links that must not be used by non-admins
 					$(".admin").css("visibility", "hidden");
 				});
-				
-				//MessageBox.information(
-				//	self.getTextById("Datasetlist.download.information")
-				//);
 			}, 500);
 			
-			this._getDatasets(function(aData) {
+			self._getDatasets(function(aData) {
 				var oView = self.getView();
 				
 				// set model

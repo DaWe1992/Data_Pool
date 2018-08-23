@@ -73,7 +73,7 @@ sap.ui.define([
 					return;
 				}
 				
-				var sFileName = "AOA_" + Date.now() + "_" + sFileName;
+				var sFileName = "AOA_" + Date.now() + "_v1_" + sFileName;
 				
 				oView.byId("uploadPage").setBusy(true);
 				
