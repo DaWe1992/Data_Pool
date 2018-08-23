@@ -43,8 +43,10 @@ module.exports = function(oApp) {
 			}
 			
 			return oRes.status(200).json({
-				"used_space_mb": (dUsed / 1000000),
-				"used_percent": 100 * dUsed / 1000000000000
+				"data": {
+					"used_space_mb": (dUsed / 1000000),
+					"used_space_percent": 100 * dUsed / 1000000000000
+				}
 			});
 		});
 	});

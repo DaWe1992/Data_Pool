@@ -51,10 +51,12 @@ Update/Change-Log:
 								icon="sap-icon://contacts"
 								type="Navigation"
 								press="onPressGoToLogs"/>
-							<!--<ActionListItem
-								id="itemNavLogout"
-								text="{i18n>Nav.logout}"
-								press="onPressLogout"/>-->
+							<StandardListItem
+								id="itemNavDiskUsage"
+								title="{i18n>Nav.diskusage}"
+								icon="sap-icon://save"
+								type="Active"
+								press="onPressDiskUsage"/>
 						</items>
 					</List>
 				</content>
