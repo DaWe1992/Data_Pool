@@ -1,5 +1,5 @@
 /**
- * Routes dataset.
+ * Routes data sets.
  * 27.04.2018
  *
  * Update/Change-Log:
@@ -26,6 +26,8 @@
  *
  * 13.08.2018: Added title attribute for data sets
  *
+ * 24.08.2018: Split file into 'routes-datasets.js', 'routes-datasets-upload' and 'routes-datasets-update'
+ *
  * @author D062271
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  */
@@ -35,7 +37,6 @@
 // import necessary modules
 var fs 					 = require("fs");
 var path				 = require("path");
-var rl 					 = require("readline");
 var esc		  	 		 = require("pg-escape");
 var busboy 				 = require("connect-busboy");
 
@@ -61,39 +62,39 @@ module.exports = function(oApp) {
 
 			postgres.query(sSql, function(oErr, oResult) {
 				if(oErr) {return oRes.status(500).json({"err": oErr});}
-				var regex = /^AOA_(.*?)_(.*?)_(.*)$/;
-				
-				// read file size from file system
-				for(var i = 0; i < oResult.rows.length; i++) {
-					var sFileName = path.join(config.app.dataset_root_path, oResult.rows[i].file_name);
-					
-					var oStats = fs.statSync(sFileName);
-					var dFileSizeInBytes = oStats.size
-					// convert file size to megabytes
-					oResult.rows[i].file_size_mb = dFileSizeInBytes / 1000000.0
-					
-					// extract date and short file name from long file name
-					var aMatch = regex.exec(oResult.rows[i].file_name);
-					
-					oResult.rows[i].file_date = formatTimestamp(new Date(parseInt(aMatch[1])));
-					oResult.rows[i].file_version = aMatch[2];
-					oResult.rows[i].file_name_short = aMatch[3];
-				}
-
 				return oRes.status(200).json({
-					"data": oResult.rows
+					"data": prepareDatasets(oResult.rows)
 				});
 			});
 		});
 	}),
 	
 	/**
+	 * Gets the data set specified
+	 *
+	 * @name /datasets/:file_id
+	 * @param file_id (obligatory)
+	 */
+	oApp.get("/datasets/:file_id", isAuthenticated, function(oReq, oRes) {
+		var sId = oReq.params.file_id;
+		
+		var sSql = esc("SELECT * FROM datasets WHERE file_id = %Q;", sId);
+		
+		postgres.query(sSql, function(oErr, oResult) {
+			if(oErr) {return oRes.status(500).json({"err": oErr});}
+			return oRes.status(200).json({
+				"data": prepareDatasets(oResult.rows)
+			});
+		});
+	});
+	
+	/**
      * Downloads the file specified.
      *
-     * @name /datasets/:file_name
+     * @name /datasets/:file_name/download
 	 * @param file_name (obligatory)
      */
-	oApp.get("/datasets/:file_name", isAuthenticated, function(oReq, oRes) {
+	oApp.get("/datasets/:file_name/download", isAuthenticated, function(oReq, oRes) {
 		var sFileName = oReq.params.file_name;
 		var sPath = path.join(config.app.dataset_root_path, sFileName);
 		// statistics about file
@@ -114,93 +115,6 @@ module.exports = function(oApp) {
 			fs.createReadStream(sPath).pipe(oRes);
 		});
 	}),
-	
-	/**
-	 * Posts a new dataset to the server.
-	 *
-	 * @name /dataset
-	 * @param file_name (optional, used for renaming the file on the server)
-	 */
-	oApp.post("/dataset/:file_name?", isAuthenticatedAdmin, function(oReq, oRes) {
-		oReq.pipe(oReq.busboy);
-	
-		oReq.busboy.on("file", function(sFieldname, oFile, sFileName) {
-			sFileName = oReq.params.file_name ? oReq.params.file_name : sFileName;
-			// if a new file arrives => create write stream
-			var oWriteStream = fs.createWriteStream(
-				path.join(config.app.dataset_root_path, sFileName)
-			);
-			
-			oFile.pipe(oWriteStream);
-			oWriteStream.on("close", function() {
-				oRes.redirect("back");
-			});
-		});
-	});
-	
-	/**
-	 * Posts a new dataset description and title to the server.
-	 *
-	 * @name /addDescription
-	 */
-	oApp.post("/addDescription", isAuthenticatedAdmin, function(oReq, oRes) {
-		var sFileName = oReq.body.file_name;
-		var sFileTitle = oReq.body.file_title;
-		var sDescription = oReq.body.file_description || "No description";
-		
-		// insert new dataset into database
-		var sSql = esc("INSERT INTO datasets (file_name, file_title, file_description) VALUES (%Q, %Q, %Q);",
-		sFileName, sFileTitle, sDescription);
-		
-		postgres.query(sSql, function(oErr, oResult) {
-			if(oErr) {return oRes.status(500).json({"err": oErr});}
-
-			return oRes.status(200).json({
-				"status": "ok"
-			});
-		});
-	});
-	
-	/**
-	 * Gets the description and the title for the dataset specified.
-	 *
-	 * @name /datasets/:file_id/description
-	 * @param file_id (obligatory)
-	 */
-	oApp.get("/datasets/:file_id/description", isAuthenticated, function(oReq, oRes) {
-		var sId = oReq.params.file_id;
-		
-		var sSql = esc("SELECT file_description, file_title FROM datasets WHERE file_id = %Q;", sId);
-		
-		postgres.query(sSql, function(oErr, oResult) {
-			if(oErr) {return oRes.status(500).json({"err": oErr});}
-			return oRes.status(200).json({
-				"data": oResult.rows
-			});
-		});
-	});
-	
-	/**
-	 * Updates the description and the title of a data set.
-	 *
-	 * @name /datasets/:file_id/description
-	 * @param file_id (obligatory)
-	 */
-	oApp.put("/datasets/:file_id/description", isAuthenticatedAdmin, function(oReq, oRes) {
-		var sId = oReq.params.file_id;
-		var sFileTitle = oReq.body.file_title;
-		var sDescription = oReq.body.file_description || "No description";
-		
-		var sSql = esc("UPDATE datasets SET file_description = %Q, file_title = %Q WHERE file_id = %Q;",
-		sDescription, sFileTitle, sId);
-		
-		postgres.query(sSql, function(oErr, oResult) {
-			if(oErr) {return oRes.status(500).json({"err": oErr});}
-			return oRes.status(200).json({
-				"status": "ok"
-			});
-		});
-	});
 	
 	/**
 	 * Deletes a dataset from the server.
@@ -244,6 +158,36 @@ module.exports = function(oApp) {
 		});
 	});
 };
+
+/**
+ * Adds additional information to the data set
+ * which is not stored in the database.
+ *
+ * @param aData (array of data sets)
+ * @return prepared data sets
+ */
+function prepareDatasets(aData) {
+	var regex = /^AOA_(.*?)_(.*?)_(.*)$/;
+	
+	// read file size from file system
+	for(var i = 0; i < aData.length; i++) {
+		var sFileName = path.join(config.app.dataset_root_path, aData[i].file_name);
+		
+		var oStats = fs.statSync(sFileName);
+		var dFileSizeInBytes = oStats.size
+		// convert file size to megabytes
+		aData[i].file_size_mb = dFileSizeInBytes / 1000000.0
+		
+		// extract date and short file name from long file name
+		var aMatch = regex.exec(aData[i].file_name);
+		
+		aData[i].file_date = formatTimestamp(new Date(parseInt(aMatch[1])));
+		aData[i].file_version = "v" + aMatch[2];
+		aData[i].file_name_short = aMatch[3];
+	}
+	
+	return aData;
+}
 
 /**
  * Converts a time stamp into a readable format.

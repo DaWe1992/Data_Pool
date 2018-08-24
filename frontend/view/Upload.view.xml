@@ -21,8 +21,6 @@ Update/Change-Log:
 			<l:VerticalLayout width="100%">
 				<u:FileUploader
 					id="fileUploader"
-					name="myFileUpload"
-					uploadUrl="/dataset"
 					uploadComplete="handleUploadComplete"
 					typeMissmatch="handleTypeMissmatch"
 					style="Emphasized"

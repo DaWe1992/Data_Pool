@@ -38,6 +38,17 @@ sap.ui.define([
         },
 		
 		/**
+		 * Gets the data set specified.
+		 *
+		 * @param sFileId (id of the file to load description for)
+		 * @param fSuccess (callback in case of success)
+		 * @param fError (callback in case of error)
+		 */
+		getDataset: function(sFileId, fSuccess, fError) {
+			this._http.performGet("/datasets/" + sFileId, fSuccess, fError);
+		},
+		
+		/**
 		 * Posts the description and the title of the dataset
 		 *
 		 * @param sFileName (name of the file)
@@ -52,17 +63,6 @@ sap.ui.define([
 				"file_title": sTitle,
 				"file_description": sDescription
 			}, fSuccess, fError);
-		},
-		
-		/**
-		 * Gets the description and the title of the data set specified.
-		 *
-		 * @param sFileId (id of the file to load description for)
-		 * @param fSuccess (callback in case of success)
-		 * @param fError (callback in case of error)
-		 */
-		getDescription: function(sFileId, fSuccess, fError) {
-			this._http.performGet("/datasets/" + sFileId + "/description", fSuccess, fError);
 		},
 		
 		/**

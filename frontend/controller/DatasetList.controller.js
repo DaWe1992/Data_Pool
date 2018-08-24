@@ -11,6 +11,8 @@
  *
  *			   Added HTML tags for file description
  *
+ * 24.08.2018: Moved data set information into message box
+ *
  * @author D062271
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  */
@@ -201,6 +203,27 @@ sap.ui.define([
 		},
 		
 		/**
+		 * Shows data set information.
+		 *
+		 * @param oEvent
+		 */
+		onShowInfo: function(oEvent) {
+			var sId = oEvent.getSource().data("file_id");
+			var aData = self.getView().byId("datasetList").getModel().getData()
+			var oResult = {};
+			
+			for(var i = 0; i < aData.length; i++) {
+				if(aData[i].file_id === sId) oResult = aData[i];
+			}
+			
+			MessageBox.information(
+				self.getTextById("Datasetlist.info.uploaded") + "\n" + oResult.file_date +
+				"\n\n" + self.getTextById("Datasetlist.info.size") + "\n" + oResult.file_size_mb + " MB" + 
+				"\n\n" + self.getTextById("Datasetlist.info.version") + "\n" + oResult.file_version
+			);
+		},
+		
+		/**
          * Gets the list of datasets.
          *
          * @param fCallback
@@ -248,9 +271,19 @@ sap.ui.define([
 		 * @param fCallback
 		 */
 		_getDescription: function(sId, fCallback) {
-			new DatasetService().getDescription(sId,
+			new DatasetService().getDataset(sId,
 			function(res) {
-				fCallback(res.data);
+				var aData = res.data;
+				var aResult = [];
+				
+				for(var i = 0; i < aData.length; i++) {
+					aResult.push({
+						"file_title": aData[i].file_title,
+						"file_description": aData[i].file_description
+					});
+				}
+				
+                fCallback(aResult);
 			}, function(res) {
 				MessageBox.error(self.getTextById("Misc.error.data.load"));
 			});

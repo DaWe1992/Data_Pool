@@ -8,6 +8,7 @@ Update/Change-Log:
 13.08.2018: Added 'file_title'
 			Added HTML tags for file descriptions
 17.08.2018: Set HTML attribute preferDOM="False" to prevent rendering it several times
+24.08.2018: Added 'file_version' and moved data set information into messsage box
 
 @author D062271
 -->
@@ -35,25 +36,29 @@ Update/Change-Log:
 						<VBox
 							width="95%"
 							class="sapUiTinyMarginBegin sapUiSmallMarginTopBottom">
-							<HBox width="25%">
+							<HBox width="100%">
 								<core:Icon
 									src="sap-icon://table-chart"
 									size="2rem"
 									class="sapUiSmallMarginBegin sapUiSmallMarginTopBottom"/>
-								<VBox class="sapUiSmallMarginBegin sapUiSmallMarginTopBottom">
+								<VBox
+									class="sapUiSmallMarginBegin sapUiSmallMarginTopBottom"
+									width="100%">
 									<Label
 										text="{file_title} ({file_name_short})"
 										class="bold"/>
-									<Label
-										text="Uploaded: {file_date}"
-										class="italic"/>
-									<Label
-										text="Size: {file_size_mb} MB"
-										class="italic"/>
 									<HBox>
 										<Link
+											text="{i18n>Datasetlist.info}"
+											press="onShowInfo"
+											app:file_id="{file_id}"
+											class="underline"/>
+										<Text
+											text="|"
+											class="sapUiTinyMarginBegin sapUiTinyMarginEnd"/>
+										<Link
 											text="{i18n>Datasetlist.download}"
-											href="/datasets/{file_name}"
+											href="/datasets/{file_name}/download"
 											class="underline"/>
 										<Text
 											text="|"

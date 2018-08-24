@@ -13,33 +13,29 @@ Update/Change-Log:
 	height="100%">
 	
 	<Page
-		id="uploadPage"
+		id="updatePage"
 		title="{i18n>Update.page.header}"
 		class="sapUiResponsiveContentPadding">
 		<content>
 			<l:VerticalLayout width="100%">
-				<Text text="Select data set to update:"/>
+				<Text text="{i18n>Update.text.select}"/>
 				<Select
+					id="selectFileName"
 					forceSelection="true"
 					width="100%"
-					items="{
-						path: '/',
-						sorter: {path: 'file_id'}
-					}">
+					items="{path: '/'}">
 					<core:Item key="{file_id}" text="{file_name}"/>
 				</Select>
 				<Text
-					text="Choose the new *.zip file:"
+					text="{i18n>Update.text.uploader}"
 					class="sapUiSmallMarginTop"/>
 				<u:FileUploader
 					id="fileUploader"
-					name="myFileUpload"
-					uploadUrl="/dataset"
 					uploadComplete="handleUploadComplete"
 					typeMissmatch="handleTypeMissmatch"
 					style="Emphasized"
 					fileType="zip"
-					placeholder="{i18n>Upload.fileuploader.placeholder}"
+					placeholder="{i18n>Update.fileuploader.placeholder}"
 					width="100%">
 				</u:FileUploader>
 				<Button

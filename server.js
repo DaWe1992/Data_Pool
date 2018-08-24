@@ -72,6 +72,8 @@ oApp.use(flash());
 
 // include routes
 require("./routes/routes-datasets.js")(oApp);
+require("./routes/routes-datasets-upload.js")(oApp);
+require("./routes/routes-datasets-update.js")(oApp);
 require("./routes/routes-admin.js")(oApp);
 require("./routes/routes-logs.js")(oApp);
 require("./routes/routes-authentication.js")(oApp, passport);

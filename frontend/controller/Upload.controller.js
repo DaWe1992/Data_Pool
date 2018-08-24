@@ -31,25 +31,6 @@ sap.ui.define([
 		onInit: function() {
 			self = this;			
 		},
-		
-		/**
-		 * Is called as soon as the upload is complete.
-		 *
-		 * @param oEvent
-		 */
-		handleUploadComplete: function(oEvent) {
-			// TODO: error handling
-			var oView = self.getView();
-			
-			MessageToast.show(
-				self.getTextById("Upload.upload.complete")
-			);
-			
-			oView.byId("fileUploader").setValue("");
-			oView.byId("titleInput").setValue("");
-			oView.byId("descriptionTextArea").setValue("");
-			oView.byId("uploadPage").setBusy(false);
-		},
 
 		/**
 		 * Uploads the file selected (if authorized).
@@ -73,7 +54,7 @@ sap.ui.define([
 					return;
 				}
 				
-				var sFileName = "AOA_" + Date.now() + "_v1_" + sFileName;
+				var sFileName = "AOA_" + Date.now() + "_1_" + sFileName;
 				
 				oView.byId("uploadPage").setBusy(true);
 				
@@ -91,6 +72,25 @@ sap.ui.define([
 				oFileUploader.setUploadUrl("/dataset/" + sFileName);
 				oFileUploader.upload();
 			});
+		},
+		
+		/**
+		 * Is called as soon as the upload is complete.
+		 *
+		 * @param oEvent
+		 */
+		handleUploadComplete: function(oEvent) {
+			// TODO: error handling
+			var oView = self.getView();
+			
+			MessageToast.show(
+				self.getTextById("Upload.upload.complete")
+			);
+			
+			oView.byId("fileUploader").setValue("");
+			oView.byId("titleInput").setValue("");
+			oView.byId("descriptionTextArea").setValue("");
+			oView.byId("uploadPage").setBusy(false);
 		},
 		
 		/**
