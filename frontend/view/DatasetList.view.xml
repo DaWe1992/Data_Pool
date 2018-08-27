@@ -76,7 +76,7 @@ Update/Change-Log:
 											text="|"
 											class="sapUiTinyMarginBegin sapUiTinyMarginEnd admin"/>
 										<Link
-											text="{i18n>Datasetlist.update.description}"
+											text="{i18n>Datasetlist.update.datasetinfo.link.text}"
 											press="onOpenAlterDescriptionDialog"
 											app:file_id="{file_id}"
 											class="underline admin"/>

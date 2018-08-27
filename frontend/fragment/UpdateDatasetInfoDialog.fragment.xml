@@ -1,8 +1,9 @@
 <!--
-Fragment AlterDescriptionDialog.
+Fragment UpdateDatasetInfoDialog.
 27.07.2018
 
 Update/Change-Log:
+27.08.2018: Added update of category
 
 @author D062271
 -->
@@ -10,19 +11,23 @@ Update/Change-Log:
     xmlns="sap.m" xmlns:l="sap.ui.layout"
     xmlns:core="sap.ui.core">
 	
-	<Dialog title="{i18n>Datasetlist.alterdescriptiondialog.update.description}">
+	<Dialog title="{i18n>Datasetlist.updatedatasetinfodialog.title}">
 		<content>
 			<l:VerticalLayout
 				width="100%"
 				class="sapUiContentPadding">
 				<l:HorizontalLayout>
-					<Text text="{i18n>Datasetlist.alterdescriptiondialog.titleinput.label}:"/>
+					<Text text="{i18n>Datasetlist.updatedatasetinfodialog.titleinput.label}:"/>
 					<Text id="datasetId" class="hidden"/>
 				</l:HorizontalLayout>
 				<Input
 					id="titleInput"
 					width="100%"/>
-				<Text text="{i18n>Datasetlist.alterdescriptiondialog.descriptiontextarea.label}:"/>
+				<Text text="{i18n>Datasetlist.updatedatasetinfodialog.categoryinput.label}:"/>
+				<Input
+					id="categoryInput"
+					width="100%"/>
+				<Text text="{i18n>Datasetlist.updatedatasetinfodialog.descriptiontextarea.label}:"/>
 				<TextArea
 					id="descriptionTextArea"
 					rows="10"
@@ -31,14 +36,14 @@ Update/Change-Log:
 		</content>
 		<beginButton>
 			<Button
-				text="{i18n>Datasetlist.alterdescriptiondialog.update.description}"
-				press="onUpdateDescriptionPress"/>
+				text="{i18n>Datasetlist.updatedatasetinfodialog.button.update.text}"
+				press="onUpdateDatasetInfoPress"/>
 		</beginButton>
 		<endButton>
             <Button
 				text="{i18n>Misc.cancel}"
 				type="Reject"
-				press="onAlterDescriptionDialogCancel"/>
+				press="onUpdateDatasetInfoDialogCancel"/>
         </endButton>
 	</Dialog>	
 </core:FragmentDefinition>

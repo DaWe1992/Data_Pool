@@ -13,7 +13,7 @@
  *
  * 24.08.2018: Moved data set information into message box
  *
- * 27.08.2018: Added category filter
+ * 27.08.2018: Added category filter and update of category
  *
  * @author D062271
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -167,12 +167,12 @@ sap.ui.define([
 		
 		/************************************************
 		 *
-		 * UPDATE DESCRIPTION DIALOG
+		 * UPDATE DATASETINFO DIALOG
 		 *
 		 ************************************************/
 		
 		/**
-		 * Opens a popup to alter the description of a data set.
+		 * Opens a popup to update the information of a data set.
 		 *
 		 * @param oEvent
 		 */
@@ -183,20 +183,17 @@ sap.ui.define([
 			new AdminService().isAdmin(function() {
 				// has permission...
 				self._openDialog(
-					"AlterDescriptionDialog",
-					"com.sap.ml.data.pool.fragment.AlterDescriptionDialog"
+					"UpdateDatasetInfoDialog",
+					"com.sap.ml.data.pool.fragment.UpdateDatasetInfoDialog"
 				);
 				
-				self._getDescription(sId, function(aData) {
+				self._getDataset(sId, function(aData) {
 					var oView = self.getView();
-					var oTextDataSetId = oView.byId("datasetId");
-					var oInput = oView.byId("titleInput");
-					var oTextArea = oView.byId("descriptionTextArea");
 					
-					oTextDataSetId.setText(sId);
-					oInput.setValue(aData[0].file_title);
-					oTextArea.setValue(aData[0].file_description);
-					
+					oView.byId("datasetId").setText(sId);
+					oView.byId("titleInput").setValue(aData[0].file_title);
+					oView.byId("categoryInput").setValue(aData[0].file_category);
+					oView.byId("descriptionTextArea").setValue(aData[0].file_description);
 				});
 			}, function() {
 				// doesn't have permission...
@@ -209,17 +206,18 @@ sap.ui.define([
 		 *
 		 * @param oEvent
 		 */
-		onUpdateDescriptionPress: function(oEvent) {
+		onUpdateDatasetInfoPress: function(oEvent) {
 			var oView = self.getView();
 			
 			new DatasetService().updateDataSetInfo(
 				oView.byId("datasetId").getText(),
 				oView.byId("titleInput").getValue(),
+				oView.byId("categoryInput").getValue(),
 				oView.byId("descriptionTextArea").getValue(),
 				function(res) {
-					self._oAlterDescriptionDialog.close();
+					self._oUpdateDatasetInfoDialog.close();
 					MessageToast.show(
-						self.getTextById("Datasetlist.changed.description")
+						self.getTextById("Datasetlist.changed.datasetinfo")
 					);
 				},
 				function(res) {
@@ -231,12 +229,12 @@ sap.ui.define([
 		},
 		
 		/**
-		 * Closes the "AlterDescriptionDialog".
+		 * Closes the "UpdateDatasetInfoDialog".
 		 *
 		 * @param oEvent
 		 */
-		onAlterDescriptionDialogCancel: function(oEvent) {
-			self._oAlterDescriptionDialog.close();
+		onUpdateDatasetInfoDialogCancel: function(oEvent) {
+			self._oUpdateDatasetInfoDialog.close();
 		},
 		
 		/************************************************
@@ -359,12 +357,12 @@ sap.ui.define([
         },
 		
 		/**
-		 * Gets the description of the data set.
+		 * Gets the title, category and description of the data set.
 		 *
 		 * @param sId (id of the data set to load description for)
 		 * @param fCallback
 		 */
-		_getDescription: function(sId, fCallback) {
+		_getDataset: function(sId, fCallback) {
 			new DatasetService().getDataset(sId,
 			function(res) {
 				var aData = res.data;
@@ -373,6 +371,7 @@ sap.ui.define([
 				for(var i = 0; i < aData.length; i++) {
 					aResult.push({
 						"file_title": aData[i].file_title,
+						"file_category": aData[i].file_category,
 						"file_description": aData[i].file_description
 					});
 				}
@@ -420,8 +419,8 @@ sap.ui.define([
         _openDialog: function(sDialogType, sDialogName) {
             var oView = self.getView();
 
-            var oDialog = (sDialogType === "AlterDescriptionDialog")
-                ? self._oAlterDescriptionDialog
+            var oDialog = (sDialogType === "UpdateDatasetInfoDialog")
+                ? self._oUpdateDatasetInfoDialog
                 : self._oFilterCategoryDialog;
 
             // create dialog lazily
@@ -442,8 +441,8 @@ sap.ui.define([
                 );
             }
 
-            if(sDialogType === "AlterDescriptionDialog") {
-				self._oAlterDescriptionDialog = oDialog;	
+            if(sDialogType === "UpdateDatasetInfoDialog") {
+				self._oUpdateDatasetInfoDialog = oDialog;	
             } else {self._oFilterCategoryDialog = oDialog;}
 
             oDialog.open();

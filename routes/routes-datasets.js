@@ -28,7 +28,7 @@
  *
  * 24.08.2018: Split file into 'routes-datasets.js', 'routes-datasets-upload' and 'routes-datasets-update'
  *
- * 27.08.2018: Added category filter
+ * 27.08.2018: Added category filter and route '/categories'
  *
  * @author D062271
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *

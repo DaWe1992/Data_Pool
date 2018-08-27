@@ -58,7 +58,6 @@ sap.ui.define([
 				}
 				
 				// user is authorized...
-				//oView.byId("updatePage").setBusy(true);
 				
 				// upload file (including renaming)
 				oFileUploader.setUploadUrl("/dataset/update/" + sFileName);
@@ -79,7 +78,6 @@ sap.ui.define([
 			);
 			
 			oView.byId("fileUploader").setValue("");
-			oView.byId("uploadPage").setBusy(false);
 		},
 		
 		/**

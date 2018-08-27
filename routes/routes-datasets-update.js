@@ -5,6 +5,8 @@
  * Update/Change-Log:
  * 27.08.2018: Rename PUT route '/datasets/:file_id/description' to '/datasets/:file_id/info'
  *
+ *			    Added update of category
+ *
  * @author D062271
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  */
@@ -67,10 +69,11 @@ module.exports = function(oApp) {
 	oApp.put("/datasets/:file_id/info", isAuthenticatedAdmin, function(oReq, oRes) {
 		var sId = oReq.params.file_id;
 		var sFileTitle = oReq.body.file_title;
+		var sFileCategory = oReq.body.file_category || "Miscellaneous";
 		var sDescription = oReq.body.file_description || "No description";
 		
-		var sSql = esc("UPDATE datasets SET file_description = %Q, file_title = %Q WHERE file_id = %Q;",
-		sDescription, sFileTitle, sId);
+		var sSql = esc("UPDATE datasets SET file_description = %Q, file_title = %Q, file_category = %Q WHERE file_id = %Q;",
+		sDescription, sFileTitle, sFileCategory, sId);
 		
 		postgres.query(sSql, function(oErr, oResult) {
 			if(oErr) {return oRes.status(500).json({"err": oErr});}

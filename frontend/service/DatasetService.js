@@ -9,7 +9,7 @@
  *
  * 13.08.2018: Added title for the data set. Changed 'addDescription', 'updateDescription'
  *
- * 27.08.2018: Added data set category
+ * 27.08.2018: Added data set category and update of category
  *
  * @author D062271
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -85,13 +85,15 @@ sap.ui.define([
 		 *
 		 * @param sFileId (id of the file to upload the description for)
 		 * @param sTitle (new title of the data set)
+		 * @param sCategory (new category of the data set)
 		 * @param sDescription (new description text)
 		 * @param fSuccess (callback in case of success)
 		 * @param fError (callback in case of error)
 		 */
-		updateDataSetInfo: function(sFileId, sTitle, sDescription, fSuccess, fError) {
+		updateDataSetInfo: function(sFileId, sTitle, sCategory, sDescription, fSuccess, fError) {
 			this._http.performPut("/datasets/" + sFileId + "/info", {
 				"file_title": sTitle,
+				"file_category": sCategory,
 				"file_description": sDescription
 			}, fSuccess, fError);
 		},
