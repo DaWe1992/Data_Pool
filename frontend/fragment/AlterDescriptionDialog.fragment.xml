@@ -10,19 +10,19 @@ Update/Change-Log:
     xmlns="sap.m" xmlns:l="sap.ui.layout"
     xmlns:core="sap.ui.core">
 	
-	<Dialog title="{i18n>Datasetlist.update.description}">
+	<Dialog title="{i18n>Datasetlist.alterdescriptiondialog.update.description}">
 		<content>
 			<l:VerticalLayout
 				width="100%"
 				class="sapUiContentPadding">
 				<l:HorizontalLayout>
-					<Text text="{i18n>Datasetlist.titleinput.label}:"/>
+					<Text text="{i18n>Datasetlist.alterdescriptiondialog.titleinput.label}:"/>
 					<Text id="datasetId" class="hidden"/>
 				</l:HorizontalLayout>
 				<Input
 					id="titleInput"
 					width="100%"/>
-				<Text text="{i18n>Datasetlist.descriptiontextarea.label}:"/>
+				<Text text="{i18n>Datasetlist.alterdescriptiondialog.descriptiontextarea.label}:"/>
 				<TextArea
 					id="descriptionTextArea"
 					rows="10"
@@ -31,7 +31,7 @@ Update/Change-Log:
 		</content>
 		<beginButton>
 			<Button
-				text="{i18n>Datasetlist.update.description}"
+				text="{i18n>Datasetlist.alterdescriptiondialog.update.description}"
 				press="onUpdateDescriptionPress"/>
 		</beginButton>
 		<endButton>

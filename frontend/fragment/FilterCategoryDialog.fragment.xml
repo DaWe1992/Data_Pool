@@ -1,0 +1,25 @@
+<!--
+Fragment FilterCategoryDialog.
+27.08.2018
+
+Update/Change-Log:
+
+@author D062271
+-->
+<core:FragmentDefinition
+    xmlns="sap.m" xmlns:l="sap.ui.layout"
+    xmlns:core="sap.ui.core">
+	
+	<SelectDialog
+		title="{i18n>Datasetlist.categoryfilterdialog.title}"
+		multiSelect="true"
+		search="onCategorySearch"
+		confirm="onFilterCategoriesPress"
+		items="{path: '/'}">
+		<StandardListItem
+			title="{file_category}"
+			icon="sap-icon://tags"
+			iconInset="false"
+			type="Active"/>
+	</SelectDialog>	
+</core:FragmentDefinition>

@@ -3,6 +3,7 @@
  * 27.04.2018
  *
  * Update/Change-Log:
+ * 27.08.2018: Added 'file_category'
  *
  * @author D062271
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -51,16 +52,17 @@ module.exports = function(oApp) {
 	/**
 	 * Posts a new dataset description and title to the server.
 	 *
-	 * @name /addDescription
+	 * @name /addDataSetInfo
 	 */
-	oApp.post("/addDescription", isAuthenticatedAdmin, function(oReq, oRes) {
+	oApp.post("/addDataSetInfo", isAuthenticatedAdmin, function(oReq, oRes) {
 		var sFileName = oReq.body.file_name;
 		var sFileTitle = oReq.body.file_title;
+		var sFileCategory = oReq.body.file_category || "Miscellaneous";
 		var sDescription = oReq.body.file_description || "No description";
 		
 		// insert new dataset into database
-		var sSql = esc("INSERT INTO datasets (file_name, file_title, file_description) VALUES (%Q, %Q, %Q);",
-		sFileName, sFileTitle, sDescription);
+		var sSql = esc("INSERT INTO datasets (file_name, file_title, file_category, file_description) VALUES (%Q, %Q, %Q, %Q);",
+		sFileName, sFileTitle, sFileCategory, sDescription);
 		
 		postgres.query(sSql, function(oErr, oResult) {
 			if(oErr) {return oRes.status(500).json({"err": oErr});}

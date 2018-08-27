@@ -18,7 +18,7 @@ Update/Change-Log:
 		class="sapUiResponsiveContentPadding">
 		<content>
 			<l:VerticalLayout width="100%">
-				<Text text="{i18n>Update.text.select}"/>
+				<Text text="{i18n>Update.select.text}"/>
 				<Select
 					id="selectFileName"
 					forceSelection="true"
@@ -27,7 +27,7 @@ Update/Change-Log:
 					<core:Item key="{file_id}" text="{file_name}"/>
 				</Select>
 				<Text
-					text="{i18n>Update.text.uploader}"
+					text="{i18n>Update.uploader.text}"
 					class="sapUiSmallMarginTop"/>
 				<u:FileUploader
 					id="fileUploader"

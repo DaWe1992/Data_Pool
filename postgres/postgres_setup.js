@@ -9,6 +9,8 @@
  *
  * 13.08.2018: Added 'file_title' column in 'datasets' table
  *
+ * 27.08.2018: Added 'file_category' column in 'datasets' table
+ *
  * @author D062271
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  */
@@ -26,6 +28,7 @@ module.exports = function() {
 			"file_id SERIAL PRIMARY KEY, " +
 			"file_title VARCHAR(100) NOT NULL, " +
 			"file_name VARCHAR(100) NOT NULL UNIQUE, " +
+			"file_category VARCHAR(100), " +
 			"file_description TEXT" +
 		");",
 		function(oErr, oResult) {}
@@ -35,7 +38,7 @@ module.exports = function() {
 	postgres.query("" +
 		"CREATE TABLE IF NOT EXISTS logs (" +
 			"log_id SERIAL PRIMARY KEY, " +
-			"log_file VARCHAR(100)," +
+			"log_file VARCHAR(100), " +
 			"log_user VARCHAR(20), " +
 			"log_time timestamp" +
 		");",

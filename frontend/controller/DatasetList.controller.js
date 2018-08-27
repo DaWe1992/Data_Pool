@@ -13,6 +13,8 @@
  *
  * 24.08.2018: Moved data set information into message box
  *
+ * 27.08.2018: Added category filter
+ *
  * @author D062271
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  */
@@ -28,6 +30,10 @@ sap.ui.define([
 	"use strict";
 	
 	var self;
+	
+	var oTextFilter;
+	var oCategoryFilter;
+	var aSelectedCategories;
 
 	return BaseController.extend("com.sap.ml.data.pool.controller.DatasetList", {
 		
@@ -36,6 +42,8 @@ sap.ui.define([
 		 */
 		onInit: function() {
 			self = this;
+			
+			self.aSelectedCategories = [];
 			
 			setTimeout(function() {
 				new AdminService().isAdmin(function() {}, function() {
@@ -55,6 +63,12 @@ sap.ui.define([
 					self.getTextById("Datasetlist.toolbar.text") + " " + aData.length
 				);
 			});
+			
+			self._getCategories(function(aData) {
+				aData.forEach(function(oCategory) {
+					self.aSelectedCategories.push(oCategory.file_category);
+				});
+			});
 		},
 		
 		/**
@@ -69,21 +83,16 @@ sap.ui.define([
 			var sQuery = oEvent.getSource().getValue();
 			
 			if(sQuery && sQuery.length > 0) {
-				var oFilter = new Filter("file_name", sap.ui.model.FilterOperator.Contains, sQuery);
-				aFilters.push(oFilter);
+				aFilters.push(
+					new Filter("file_name", sap.ui.model.FilterOperator.Contains, sQuery)
+				);
 			}
-
-			// update list binding
-			var oList = self.byId("datasetList");
-			var oBinding = oList.getBinding("items");
-			oBinding.filter(aFilters, "Application");
 			
-			// update toolbar label
-			var oView = self.getView();
-			var oLabel = oView.byId("toolbarLabel");
-			oLabel.setText(
-				self.getTextById("Datasetlist.toolbar.text") + " " + oBinding.aIndices.length
-			);
+			self.oTextFilter = new Filter({
+				filters: aFilters
+			});
+			
+			self._filter();
 		},
 		
 		/**
@@ -135,6 +144,34 @@ sap.ui.define([
 		},
 		
 		/**
+		 * Shows data set information.
+		 *
+		 * @param oEvent
+		 */
+		onShowInfo: function(oEvent) {
+			var sId = oEvent.getSource().data("file_id");
+			var aData = self.getView().byId("datasetList").getModel().getData()
+			var oResult = {};
+			
+			for(var i = 0; i < aData.length; i++) {
+				if(aData[i].file_id === sId) oResult = aData[i];
+			}
+			
+			MessageBox.information(
+				self.getTextById("Datasetlist.info.uploaded") + "\n" + oResult.file_date +
+				"\n\n" + self.getTextById("Datasetlist.info.size") + "\n" + oResult.file_size_mb + " MB" +
+				"\n\n" + self.getTextById("Datasetlist.info.category") + "\n" + oResult.file_category +
+				"\n\n" + self.getTextById("Datasetlist.info.version") + "\n" + oResult.file_version
+			);
+		},
+		
+		/************************************************
+		 *
+		 * UPDATE DESCRIPTION DIALOG
+		 *
+		 ************************************************/
+		
+		/**
 		 * Opens a popup to alter the description of a data set.
 		 *
 		 * @param oEvent
@@ -175,7 +212,7 @@ sap.ui.define([
 		onUpdateDescriptionPress: function(oEvent) {
 			var oView = self.getView();
 			
-			new DatasetService().updateDescription(
+			new DatasetService().updateDataSetInfo(
 				oView.byId("datasetId").getText(),
 				oView.byId("titleInput").getValue(),
 				oView.byId("descriptionTextArea").getValue(),
@@ -202,26 +239,83 @@ sap.ui.define([
 			self._oAlterDescriptionDialog.close();
 		},
 		
+		/************************************************
+		 *
+		 * CATEGORY FILTER DIALOG
+		 *
+		 ************************************************/
+		
 		/**
-		 * Shows data set information.
+		 * Opens a popup to filter data sets by categories.
 		 *
 		 * @param oEvent
 		 */
-		onShowInfo: function(oEvent) {
-			var sId = oEvent.getSource().data("file_id");
-			var aData = self.getView().byId("datasetList").getModel().getData()
-			var oResult = {};
+		onOpenFilterCategoryDialog: function(oEvent) {
+			self._getCategories(function(aData) {
+				var oDialog = self._openDialog(
+					"FilterCategoryDialog",
+					"com.sap.ml.data.pool.fragment.FilterCategoryDialog"
+				);
+				
+				oDialog.setModel(new JSONModel(aData));
+				
+				// tick all selected categories
+				oDialog.getItems().forEach(function(oItem) {
+					var sCategory = oItem.getProperty("title");
+					
+					if(self.aSelectedCategories.includes(sCategory)) {
+						oItem.setSelected(true);
+					}
+				});
+			});
+		},
+		
+		/**
+		 * Filters categories in dialog.
+		 *
+		 * @param oEvent
+		 */
+		onCategorySearch: function(oEvent) {
+			var sValue = oEvent.getParameter("value");
+			var oFilter = new Filter("file_category", sap.ui.model.FilterOperator.Contains, sValue);
+			var oBinding = oEvent.getSource().getBinding("items");
+			oBinding.filter([oFilter]);
+		},
+		
+		/**
+		 * Filters data sets by categories
+		 *
+		 * @param oEvent
+		 */
+		onFilterCategoriesPress: function(oEvent) {
+			var aSelectedItems = oEvent.getParameter("selectedItems");
+			var aFilters = [];
+			self.aSelectedCategories = [];
 			
-			for(var i = 0; i < aData.length; i++) {
-				if(aData[i].file_id === sId) oResult = aData[i];
+			for(var i = 0; i < aSelectedItems.length; i++) {
+				var sCategory = aSelectedItems[i].getProperty("title");
+				self.aSelectedCategories.push(sCategory);
+				
+				aFilters.push(new Filter(
+					"file_category",
+					sap.ui.model.FilterOperator.EQ,
+					sCategory
+				));
 			}
 			
-			MessageBox.information(
-				self.getTextById("Datasetlist.info.uploaded") + "\n" + oResult.file_date +
-				"\n\n" + self.getTextById("Datasetlist.info.size") + "\n" + oResult.file_size_mb + " MB" + 
-				"\n\n" + self.getTextById("Datasetlist.info.version") + "\n" + oResult.file_version
-			);
+			self.oCategoryFilter = new Filter({
+				filters: aFilters,
+				and: false
+			});
+			
+			self._filter();
 		},
+		
+		/************************************************
+		 *
+		 * HELPER FUNCTIONS
+		 *
+		 ************************************************/
 		
 		/**
          * Gets the list of datasets.
@@ -290,6 +384,20 @@ sap.ui.define([
 		},
 		
 		/**
+		 * Gets the list of all categories.
+		 *
+		 * @param fCallback
+		 */
+		_getCategories: function(fCallback) {
+			new DatasetService().getCategories(
+			function(res) {
+				fCallback(res.data)
+			}, function(res) {
+				MessageBox.error(self.getTextById("Misc.error.data.load"));
+			});
+		},
+		
+		/**
 		 * Deletes the dataset.
 		 *
 		 * @param sId (id of dataset to be deleted)
@@ -314,7 +422,7 @@ sap.ui.define([
 
             var oDialog = (sDialogType === "AlterDescriptionDialog")
                 ? self._oAlterDescriptionDialog
-                : undefined;
+                : self._oFilterCategoryDialog;
 
             // create dialog lazily
             if(!oDialog) {
@@ -336,9 +444,39 @@ sap.ui.define([
 
             if(sDialogType === "AlterDescriptionDialog") {
 				self._oAlterDescriptionDialog = oDialog;	
-            } else {undefined;}
+            } else {self._oFilterCategoryDialog = oDialog;}
 
             oDialog.open();
-        }
+			return oDialog;
+        },
+		
+		/**
+		 * Filters data sets by categories and text input.
+		 */
+		_filter: function() {
+			// update list binding
+			var oList = self.byId("datasetList");
+			var oBinding = oList.getBinding("items");
+			
+			var aFilters = [];
+			if(self.oTextFilter && self.oTextFilter.aFilters.length > 0) {
+				aFilters.push(self.oTextFilter);
+			} else {oBinding.filter();}
+			if(self.oCategoryFilter) aFilters.push(self.oCategoryFilter);
+			
+			// filter
+			oBinding.filter(new Filter({
+				filters: aFilters,
+				and: true
+			}));
+			
+			// update toolbar label
+			var oView = self.getView();
+			var oLabel = oView.byId("toolbarLabel");
+			oLabel.setText(
+				self.getTextById("Datasetlist.toolbar.text") +
+				" " + oBinding.aIndices.length
+			);
+		}
 	});
 });

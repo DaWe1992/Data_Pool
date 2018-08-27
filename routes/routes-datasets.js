@@ -28,6 +28,8 @@
  *
  * 24.08.2018: Split file into 'routes-datasets.js', 'routes-datasets-upload' and 'routes-datasets-update'
  *
+ * 27.08.2018: Added category filter
+ *
  * @author D062271
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  */
@@ -89,6 +91,22 @@ module.exports = function(oApp) {
 	});
 	
 	/**
+     * Gets a list of all categories.
+     *
+     * @name /categories
+     */
+	oApp.get("/categories", isAuthenticated, function(oReq, oRes) {
+		var sSql = "SELECT DISTINCT file_category FROM datasets ORDER BY file_category;";
+		
+		postgres.query(sSql, function(oErr, oResult) {
+			if(oErr) {return oRes.status(500).json({"err": oErr});}
+			return oRes.status(200).json({
+				"data": oResult.rows
+			});
+		});
+	});
+	
+	/**
      * Downloads the file specified.
      *
      * @name /datasets/:file_name/download
@@ -114,7 +132,7 @@ module.exports = function(oApp) {
 			// pipe result into response
 			fs.createReadStream(sPath).pipe(oRes);
 		});
-	}),
+	});
 	
 	/**
 	 * Deletes a dataset from the server.

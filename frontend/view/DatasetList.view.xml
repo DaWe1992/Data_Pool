@@ -9,6 +9,7 @@ Update/Change-Log:
 			Added HTML tags for file descriptions
 17.08.2018: Set HTML attribute preferDOM="False" to prevent rendering it several times
 24.08.2018: Added 'file_version' and moved data set information into messsage box
+27.08.2018: Added category filter
 
 @author D062271
 -->
@@ -24,6 +25,9 @@ Update/Change-Log:
 				<SearchField
 					liveChange="onSearch"
 					width="100%"/>
+				<Button
+					icon="sap-icon://filter"
+					press="onOpenFilterCategoryDialog"/>
 			</Toolbar>
 		</subHeader>
 		<content>

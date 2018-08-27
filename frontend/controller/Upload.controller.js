@@ -9,6 +9,8 @@
  *
  * 13.08.2018: Added title for the data set
  *
+ * 27.08.2018: Added data set category
+ *
  * @author D062271
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  */
@@ -42,12 +44,13 @@ sap.ui.define([
 				// this is only executed if user is authorized
 				var oView = self.getView();
 				var oFileUploader = oView.byId("fileUploader");
-				var oInput = oView.byId("titleInput");
+				var oInputTitle = oView.byId("titleInput");
+				var oInputCategory = oView.byId("categoryInput");
 				
 				var sFileName = oFileUploader.getValue();
 				
 				// check if valid file was selected
-				if(!(sFileName && oInput.getValue())) {
+				if(!(sFileName && oInputTitle.getValue())) {
 					MessageToast.show(
 						self.getTextById("Upload.error.no.file.selected.no.title")
 					);
@@ -59,12 +62,13 @@ sap.ui.define([
 				oView.byId("uploadPage").setBusy(true);
 				
 				// file was selected and user is authorized...
-				var oTextArea = oView.byId("descriptionTextArea");
+				var oTextAreaDescription = oView.byId("descriptionTextArea");
 				
-				new DatasetService().addDescription(
+				new DatasetService().addDataSetInfo(
 					sFileName,
-					oInput.getValue(),
-					oTextArea.getValue(),
+					oInputTitle.getValue(),
+					oInputCategory.getValue(),
+					oTextAreaDescription.getValue(),
 					function() {}, function() {}
 				);
 				
@@ -89,6 +93,7 @@ sap.ui.define([
 			
 			oView.byId("fileUploader").setValue("");
 			oView.byId("titleInput").setValue("");
+			oView.byId("categoryInput").setValue("");
 			oView.byId("descriptionTextArea").setValue("");
 			oView.byId("uploadPage").setBusy(false);
 		},

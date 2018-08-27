@@ -9,6 +9,8 @@
  *
  * 13.08.2018: Added title for the data set. Changed 'addDescription', 'updateDescription'
  *
+ * 27.08.2018: Added data set category
+ *
  * @author D062271
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  */
@@ -49,18 +51,31 @@ sap.ui.define([
 		},
 		
 		/**
-		 * Posts the description and the title of the dataset
+		 * Gets a list of all categories.
 		 *
-		 * @param sFileName (name of the file)
-		 * @param sTitle (title of the dataset)
-		 * @param sDescription (description of the dataset)
 		 * @param fSuccess (callback in case of success)
          * @param fError (callback in case of error)
 		 */
-		addDescription: function(sFileName, sTitle, sDescription, fSuccess, fError) {
-			this._http.performPost("/addDescription", {
+		getCategories: function(fSuccess, fError) {
+			this._http.performGet("/categories", fSuccess, fError);
+		},
+		
+		/**
+		 * Posts additional information about the data set
+		 * to the server.
+		 *
+		 * @param sFileName (name of the file)
+		 * @param sTitle (title of the data set)
+		 * @param sCategory (category of the data set)
+		 * @param sDescription (description of the data set)
+		 * @param fSuccess (callback in case of success)
+         * @param fError (callback in case of error)
+		 */
+		addDataSetInfo: function(sFileName, sTitle, sCategory, sDescription, fSuccess, fError) {
+			this._http.performPost("/addDataSetInfo", {
 				"file_name": sFileName,
 				"file_title": sTitle,
+				"file_category": sCategory,
 				"file_description": sDescription
 			}, fSuccess, fError);
 		},
@@ -74,8 +89,8 @@ sap.ui.define([
 		 * @param fSuccess (callback in case of success)
 		 * @param fError (callback in case of error)
 		 */
-		updateDescription: function(sFileId, sTitle, sDescription, fSuccess, fError) {
-			this._http.performPut("/datasets/" + sFileId + "/description", {
+		updateDataSetInfo: function(sFileId, sTitle, sDescription, fSuccess, fError) {
+			this._http.performPut("/datasets/" + sFileId + "/info", {
 				"file_title": sTitle,
 				"file_description": sDescription
 			}, fSuccess, fError);

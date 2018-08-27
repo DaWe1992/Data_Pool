@@ -30,7 +30,11 @@ Update/Change-Log:
 				</u:FileUploader>
 				<Input
 					id="titleInput"
-					placeholder="{i18n>Upload.titleinput.placeholder}"
+					placeholder="{i18n>Upload.input.title.placeholder}"
+					width="100%"/>
+				<Input
+					id="categoryInput"
+					placeholder="{i18n>Upload.input.category.placeholder}"
 					width="100%"/>
 				<TextArea
 					id="descriptionTextArea"
