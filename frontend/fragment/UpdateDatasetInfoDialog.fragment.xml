@@ -49,7 +49,7 @@ Update/Change-Log:
 				<Text text="{i18n>Datasetlist.updatedatasetinfodialog.descriptiontextarea.label}:"/>
 				<TextArea
 					id="descriptionTextArea"
-					rows="10"
+					rows="20"
 					width="100%"/>
 			</l:VerticalLayout>
 		</content>
