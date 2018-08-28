@@ -4,6 +4,7 @@ View Upload.
 
 Update/Change-Log:
 13.08.2018: Added an input field for the title
+28.08.2018: Added guided category input
 
 @author D062271
 -->
@@ -35,7 +36,25 @@ Update/Change-Log:
 				<Input
 					id="categoryInput"
 					placeholder="{i18n>Upload.input.category.placeholder}"
-					width="100%"/>
+					width="100%"
+					showSuggestion="true"
+					showTableSuggestionValueHelp="false"
+					suggestionRows="{/}">
+					<suggestionColumns>
+						<Column
+							hAlign="Begin"
+							popinDisplay="Inline"
+							demandPopin="true">
+						</Column>
+					</suggestionColumns>
+					<suggestionRows>
+						<ColumnListItem>
+							<cells>
+								<Label text="{file_category}"/>
+							</cells>
+						</ColumnListItem>
+					</suggestionRows>
+				</Input>
 				<TextArea
 					id="descriptionTextArea"
 					rows="10"

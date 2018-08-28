@@ -11,6 +11,8 @@
  *
  * 27.08.2018: Added data set category
  *
+ * 28.08.2018: Added guided category input
+ *
  * @author D062271
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  */
@@ -18,9 +20,10 @@ sap.ui.define([
 	"com/sap/ml/data/pool/controller/BaseController",
 	"com/sap/ml/data/pool/service/AdminService",
 	"com/sap/ml/data/pool/service/DatasetService",
+	"sap/ui/model/json/JSONModel",
 	"sap/m/MessageToast",
 	"sap/m/MessageBox"
-], function(BaseController, AdminService, DatasetService, MessageToast, MessageBox) {
+], function(BaseController, AdminService, DatasetService, JSONModel, MessageToast, MessageBox) {
 	"use strict";
 	
 	var self;
@@ -31,7 +34,14 @@ sap.ui.define([
 		 * onInit function.
 		 */
 		onInit: function() {
-			self = this;			
+			self = this;
+	
+			// guided category input
+			self._getCategories(function(aData) {			
+				self.getView().byId("categoryInput").setModel(
+					new JSONModel(aData)
+				);
+			});
 		},
 
 		/**
@@ -120,6 +130,20 @@ sap.ui.define([
 			}, function(res) {
 				MessageBox.error(self.getTextById("Misc.error.no.admin"));
 			});
-		}
+		},
+		
+		/**
+		 * Gets the list of all categories.
+		 *
+		 * @param fCallback
+		 */
+		_getCategories: function(fCallback) {
+			new DatasetService().getCategories(
+			function(res) {
+				fCallback(res.data)
+			}, function(res) {
+				MessageBox.error(self.getTextById("Misc.error.data.load"));
+			});
+		},
 	});
 });

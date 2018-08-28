@@ -4,6 +4,7 @@ Fragment UpdateDatasetInfoDialog.
 
 Update/Change-Log:
 27.08.2018: Added update of category
+28.08.2018: Added guided category input
 
 @author D062271
 -->
@@ -26,7 +27,25 @@ Update/Change-Log:
 				<Text text="{i18n>Datasetlist.updatedatasetinfodialog.categoryinput.label}:"/>
 				<Input
 					id="categoryInput"
-					width="100%"/>
+					width="100%"
+					showSuggestion="true"
+					showTableSuggestionValueHelp="false"
+					suggestionRows="{/}">
+					<suggestionColumns>
+						<Column
+							hAlign="Begin"
+							popinDisplay="Inline"
+							demandPopin="true">
+						</Column>
+					</suggestionColumns>
+					<suggestionRows>
+						<ColumnListItem>
+							<cells>
+								<Label text="{file_category}"/>
+							</cells>
+						</ColumnListItem>
+					</suggestionRows>
+				</Input>
 				<Text text="{i18n>Datasetlist.updatedatasetinfodialog.descriptiontextarea.label}:"/>
 				<TextArea
 					id="descriptionTextArea"

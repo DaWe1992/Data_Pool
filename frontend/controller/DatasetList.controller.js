@@ -15,6 +15,8 @@
  *
  * 27.08.2018: Added category filter and update of category
  *
+ * 28.08.2018: Added guided category input
+ *
  * @author D062271
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  */
@@ -182,10 +184,15 @@ sap.ui.define([
 			// check if user has admin permissions
 			new AdminService().isAdmin(function() {
 				// has permission...
-				self._openDialog(
+				var oDialog = self._openDialog(
 					"UpdateDatasetInfoDialog",
 					"com.sap.ml.data.pool.fragment.UpdateDatasetInfoDialog"
 				);
+				
+				// guided category input
+				self._getCategories(function(aData) {
+					oDialog.setModel(new JSONModel(aData));
+				});
 				
 				self._getDataset(sId, function(aData) {
 					var oView = self.getView();
