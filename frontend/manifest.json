@@ -45,7 +45,7 @@
             }
         },
 		"routing": {
-			 "config": {
+			"config": {
 				"routerClass": "sap.m.routing.Router",
 				"viewType": "XML",
 				"viewPath": "com.sap.ml.data.pool.view",
@@ -55,8 +55,8 @@
 				"bypassed": {
 					"target": "notFound"
 				}
-			 },
-			 "routes": [
+			},
+			"routes": [
 				{
 					"pattern": "",
 					"name": "home",
@@ -83,7 +83,7 @@
 					"target": "logs"
 				}
 			],
-			 "targets": {
+			"targets": {
 				"home": {
 				   "viewName": "Home",
 				   "viewLevel": 1

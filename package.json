@@ -1,5 +1,5 @@
 {
-  "name": "com.sap.ml.data.pool_backend",
+  "name": "com.sap.ml.data.pool.backend",
   "version": "1.0.0",
   "description": "",
   "main": "express.js",
