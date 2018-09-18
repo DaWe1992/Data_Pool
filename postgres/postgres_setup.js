@@ -22,7 +22,7 @@ var postgres = require("./postgres.js");
 
 module.exports = function() {
 
-    // create table customers
+    // create table 'customers'
     postgres.query("" +
 		"CREATE TABLE IF NOT EXISTS datasets (" +
 			"file_id SERIAL PRIMARY KEY, " +
@@ -34,7 +34,7 @@ module.exports = function() {
 		function(oErr, oResult) {}
 	);
 	
-	// create table logs
+	// create table 'logs'
 	postgres.query("" +
 		"CREATE TABLE IF NOT EXISTS logs (" +
 			"log_id SERIAL PRIMARY KEY, " +

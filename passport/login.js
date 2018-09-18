@@ -2,6 +2,9 @@
  * Login.
  * 03.05.2018
  *
+ * Update/Change-Log:
+ * --
+ *
  * @author D062271
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  */
@@ -35,7 +38,7 @@ module.exports = function(passport) {
 			}
 			
 			// user could be authenticated, return user
-			return fDone(null, oUser)
+			return fDone(null, oUser);
         })
     );
 };

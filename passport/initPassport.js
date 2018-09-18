@@ -2,6 +2,9 @@
  * Setup of passport.
  * 03.05.2018
  *
+ * Update/Change-Log:
+ * --
+ *
  * @author D062271
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  */
@@ -21,6 +24,6 @@ module.exports = function(passport) {
 		done(null, oUser);
 	});
 
-    // set up passport strategies for login and registration
+    // set up passport strategies for login
     login(passport);
 };

@@ -1,6 +1,6 @@
 /**
  * DatasetListController.
- * 23.04.201
+ * 23.04.2018
  *
  * Update/Change-Log:
  * 27.07.2018: Added handler functions for "AlterDescriptionDialog"

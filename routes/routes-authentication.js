@@ -23,10 +23,10 @@ module.exports = function(oApp, passport) {
      *
      * @name /login
      */
-	oApp.get("/login", function(req, res) {
+	oApp.get("/login", function(oReq, oRes) {
     	// display the login page with flash message (if present)
-		res.render("login", {
-            message: req.flash("message")
+		oRes.render("login", {
+            message: oReq.flash("message")
         });
 	});
 
