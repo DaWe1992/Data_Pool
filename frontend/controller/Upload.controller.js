@@ -125,9 +125,9 @@ sap.ui.define([
 		 * @param fCallback
 		 */
 		_isAdmin: function(fCallback) {
-			new AdminService().isAdmin(function(res) {
-				fCallback(res)
-			}, function(res) {
+			new AdminService().isAdmin(function(oRes) {
+				fCallback(oRes)
+			}, function(oRes) {
 				MessageBox.error(self.getTextById("Misc.error.no.admin"));
 			});
 		},
@@ -139,9 +139,9 @@ sap.ui.define([
 		 */
 		_getCategories: function(fCallback) {
 			new DatasetService().getCategories(
-			function(res) {
-				fCallback(res.data)
-			}, function(res) {
+			function(oRes) {
+				fCallback(oRes.data)
+			}, function(oRes) {
 				MessageBox.error(self.getTextById("Misc.error.data.load"));
 			});
 		},

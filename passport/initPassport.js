@@ -14,6 +14,8 @@
 // import necessary modules
 var login = require("./login.js");
 
+// ==============================================================
+
 module.exports = function(passport) {
 	
 	passport.serializeUser(function(oUser, done) {

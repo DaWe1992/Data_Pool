@@ -328,8 +328,8 @@ sap.ui.define([
          * @param fCallback
          */
         _getDatasets: function(fCallback) {
-            new DatasetService().getDatasets(function(res) {
-				var aData = res.data;
+            new DatasetService().getDatasets(function(oRes) {
+				var aData = oRes.data;
 				
 				// add html tags for the description
 				for(var i = 0; i < aData.length; i++) {
@@ -357,8 +357,8 @@ sap.ui.define([
 					"</html>";
 				}
 				
-                fCallback(res.data);
-            }, function(res) {
+                fCallback(oRes.data);
+            }, function(oRes) {
                 MessageBox.error(self.getTextById("Misc.error.data.load"));
             });
         },
@@ -371,8 +371,8 @@ sap.ui.define([
 		 */
 		_getDataset: function(sId, fCallback) {
 			new DatasetService().getDataset(sId,
-			function(res) {
-				var aData = res.data;
+			function(oRes) {
+				var aData = oRes.data;
 				var aResult = [];
 				
 				for(var i = 0; i < aData.length; i++) {
@@ -384,7 +384,7 @@ sap.ui.define([
 				}
 				
                 fCallback(aResult);
-			}, function(res) {
+			}, function(oRes) {
 				MessageBox.error(self.getTextById("Misc.error.data.load"));
 			});
 		},
@@ -396,9 +396,9 @@ sap.ui.define([
 		 */
 		_getCategories: function(fCallback) {
 			new DatasetService().getCategories(
-			function(res) {
-				fCallback(res.data)
-			}, function(res) {
+			function(oRes) {
+				fCallback(oRes.data);
+			}, function(oRes) {
 				MessageBox.error(self.getTextById("Misc.error.data.load"));
 			});
 		},

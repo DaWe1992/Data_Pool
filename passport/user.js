@@ -11,6 +11,8 @@
 
 "use strict";
 
+// ==============================================================
+
 // definition of users
 var aUsers = [
 	{id: 1, username: "admin", password: "m@chin€Learning"},

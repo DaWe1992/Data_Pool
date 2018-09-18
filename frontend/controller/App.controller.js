@@ -89,9 +89,9 @@ sap.ui.define([
 		 */
 		_getDiskUsage: function(fCallback) {
 			new MiscService().getDiskUsage(
-			function(res) {
-				fCallback(res.data);
-			}, function(res) {
+			function(oRes) {
+				fCallback(oRes.data);
+			}, function(oRes) {
 				MessageBox.error(self.getTextById("Misc.error.data.load"));
 			});
 		}

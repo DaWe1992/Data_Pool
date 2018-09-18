@@ -41,7 +41,7 @@ sap.ui.define([
 		 * @param oEvent
 		 */
 		handleUpdatePress: function(oEvent) {
-			self._isAdmin(function(res) {
+			self._isAdmin(function(oRes) {
 				// this is only executed if user is authorized
 				var oView = self.getView();
 				var oFileUploader = oView.byId("fileUploader");
@@ -86,8 +86,8 @@ sap.ui.define([
          * @param fCallback
          */
         _getDatasets: function(fCallback) {
-            new DatasetService().getDatasets(function(res) {
-				var aData = res.data;
+            new DatasetService().getDatasets(function(oRes) {
+				var aData = oRes.data;
 				var aResult = [];
 				
 				for(var i = 0; i < aData.length; i++) {
@@ -98,7 +98,7 @@ sap.ui.define([
 				}
 				
                 fCallback(aResult);
-            }, function(res) {
+            }, function(oRes) {
                 MessageBox.error(self.getTextById("Misc.error.data.load"));
             });
         },
@@ -109,9 +109,9 @@ sap.ui.define([
 		 * @param fCallback
 		 */
 		_isAdmin: function(fCallback) {
-			new AdminService().isAdmin(function(res) {
-				fCallback(res)
-			}, function(res) {
+			new AdminService().isAdmin(function(oRes) {
+				fCallback(oRes)
+			}, function(oRes) {
 				MessageBox.error(self.getTextById("Misc.error.no.admin"));
 			});
 		}

@@ -11,6 +11,8 @@
 
 "use strict";
 
+// ==============================================================
+
 module.exports = function(oReq, oRes, fNext) {
 	
 	// check is user is authenticated

@@ -39,9 +39,9 @@ sap.ui.define([
          * @param fCallback
          */
 		_getLogs: function(fCallback) {
-            new LogsService().getLogs(function(res) {
-                fCallback(res.data);
-            }, function(res) {
+            new LogsService().getLogs(function(oRes) {
+                fCallback(oRes.data);
+            }, function(oRes) {
                 MessageBox.error(self.getTextById("Misc.error.data.load"));
             });
         }
