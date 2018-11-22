@@ -19,10 +19,12 @@ Update/Change-Log:
 			<VBox>
 				<Label
 					text="{i18n>App.title}"
-					class="text-home"/>
-				<Label
+					class="text-home sapUiSmallMarginBottom"/>
+				<Text
 					text="{i18n>App.description}"
-					class="text-home"/>
+					renderWhitespace="true"
+					class="text-home"
+					width="60%"/>
 			</VBox>
 		</content>
 	</Page>
