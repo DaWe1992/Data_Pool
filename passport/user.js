@@ -15,8 +15,8 @@
 
 // definition of users
 var aUsers = [
-	{id: 1, username: "admin", password: "m@chinâ‚¬Learning"},
-	{id: 2, username: "AOA", password: "YesWeShare!"}
+	{id: 1, username: "admin", password: "m@chin€Learning"},
+	{id: 2, username: "AOA", password: "Y€sW€Sh@r€!"}
 ];
 
 var mod = {};
